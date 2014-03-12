@@ -105,4 +105,47 @@ public class ArrayAlgo {
 		}
 		return tail + 1;
 	}
+	
+	/**
+	 * Search a value in a roated sorted array.
+	 * Assumption: no duplicates
+	 * 
+	 * e.g. array 0, 1, 2, 3 rotated to 2, 3, 0, 1
+	 * search for -2 return -1, search for 3 return 1 
+	 * 
+	 * @param arr 	rotated sorted array of integer
+	 * @return	location of the search value or -1 if no match
+	 */
+	public static int searchRotatedSorted(int arr[], int val) {
+		//modified binary search, time O(lgN), space O(1)
+		return searchRotatedSortedRange(arr, val, 0, arr.length - 1);
+	}
+	
+	private static int searchRotatedSortedRange(int arr[], int val, int left, int right) {
+		if(right < left) {
+			return -1;
+		}
+		int mid = (left + right) / 2;
+		if(arr[mid] == val) {
+			return mid;
+		}
+		if(arr[left] < arr[mid]) {
+			//left side is in ascending order
+			if(arr[left] <= val && val < arr[mid]) {
+				return searchRotatedSortedRange(arr, val, left, mid - 1);
+			}
+			else {
+				return searchRotatedSortedRange(arr, val, mid + 1, right);
+			}
+		}
+		else {
+			//rotation boundary is on the left side, right side must be ascending order
+			if(arr[mid] < val && val <= arr[right]) {
+				return searchRotatedSortedRange(arr, val, mid + 1, right);
+			}
+			else {
+				return searchRotatedSortedRange(arr, val, left, mid - 1);
+			}
+		}
+	}
 }
