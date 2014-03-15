@@ -1,7 +1,7 @@
 package name.huguogang.Algorithms;
 /**
  * implementation of various sorting algorithms
- * 
+ * insertion sort, bubble sort, quick sort, merge sort
  * @author ghu
  *
  */
@@ -22,10 +22,16 @@ public class Sorting {
     private static int partition(int[] array, int left, int right) {
         //use left value for pivot
         int val = array[left];
+        //part that is less than pivot
         int l = left + 1;
+        //part that is greater than pivot
         int r = right;
-        while(l < r) {
-            while(l <= right && array[l] < val) {
+        while(true) {
+            //note <= here to deal with duplicated value
+            //if use < only, we may stuck in infinite loop in one of the test case
+            //however values equal to val cannot be on the right side,
+            //because r scan may go past left and hit illegal value
+            while(l <= right && array[l] <= val) {
                 l++;
             }
             while(r >= left && array[r] > val) {

@@ -217,6 +217,100 @@ public class ArrayAlgoTest {
     }
 
     @Test
+    public void searchRoatedSortedNoDupesTest() {
+        int[] array;
+        int val;
+        int ret;
+        int expected;
+
+        System.out.println("-- searchRoatedSortedTest --");
+
+        array = new int[] {};
+        val = 0;
+        expected = -1;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1 };
+        val = 0;
+        expected = -1;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1 };
+        val = 1;
+        expected = 0;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1, 2, 3, 4 };
+        val = 0;
+        expected = -1;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1, 2, 3, 4 };
+        val = 1;
+        expected = 0;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1, 2, 3, 4 };
+        val = 4;
+        expected = 3;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 1, 2, 3, 4, 5 };
+        val = 5;
+        expected = 4;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 0;
+        expected = -1;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 1;
+        expected = 4;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 2;
+        expected = 5;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 3;
+        expected = 0;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 4;
+        expected = 1;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 5;
+        expected = 2;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+
+        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        val = 6;
+        expected = 3;
+        ret = ArrayAlgo.searchRotatedSortedNoDupes(array, val);
+        assertEquals(expected, ret);
+    }
+    
+    @Test
     public void searchRoatedSortedTest() {
         int[] array;
         int val;
@@ -248,64 +342,16 @@ public class ArrayAlgoTest {
         expected = -1;
         ret = ArrayAlgo.searchRotatedSorted(array, val);
         assertEquals(expected, ret);
-
-        array = new int[] { 1, 2, 3, 4 };
-        val = 1;
-        expected = 0;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 1, 2, 3, 4 };
-        val = 4;
-        expected = 3;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 1, 2, 3, 4, 5 };
-        val = 5;
-        expected = 4;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 0;
-        expected = -1;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 1;
-        expected = 4;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 2;
-        expected = 5;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
+        
+        array = new int[] { 1, 2, 2, 2, 2, 2, 3, 4 };
         val = 3;
-        expected = 0;
+        expected = 6;
         ret = ArrayAlgo.searchRotatedSorted(array, val);
         assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 4;
-        expected = 1;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 5;
+        
+        array = new int[] { 2, 2, 3, 4, 1, 2, 2, 2};
+        val = 3;
         expected = 2;
-        ret = ArrayAlgo.searchRotatedSorted(array, val);
-        assertEquals(expected, ret);
-
-        array = new int[] { 3, 4, 5, 6, 1, 2 };
-        val = 6;
-        expected = 3;
         ret = ArrayAlgo.searchRotatedSorted(array, val);
         assertEquals(expected, ret);
     }

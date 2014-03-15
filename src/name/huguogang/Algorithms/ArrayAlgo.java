@@ -1,7 +1,7 @@
 package name.huguogang.Algorithms;
 
 /**
- * array related algorithms
+ * Array related algorithms
  * 
  * @author ghu
  * 
@@ -124,15 +124,55 @@ public class ArrayAlgo {
      * e.g. array 0, 1, 2, 3 rotated to 2, 3, 0, 1 search for -2 return -1,
      * search for 3 return 1
      * 
-     * @param arr
-     *            rotated sorted array of integer
+     * @param arr   rotated sorted array of integer
+     * @return location of the search value or -1 if no match
+     */
+    public static int searchRotatedSortedNoDupes(int arr[], int val) {
+        // modified binary search, time O(lgN), space O(1)
+        return searchRotatedSortedNoDupesRange(arr, val, 0, arr.length - 1);
+    }
+
+    private static int searchRotatedSortedNoDupesRange(int arr[], int val, int left,
+            int right) {
+        if (right < left) {
+            return -1;
+        }
+        int mid = (left + right) / 2;
+        if (arr[mid] == val) {
+            return mid;
+        }
+        if (arr[left] < arr[mid]) {
+            // left side is in ascending order
+            if (arr[left] <= val && val < arr[mid]) {
+                return searchRotatedSortedNoDupesRange(arr, val, left, mid - 1);
+            } else {
+                return searchRotatedSortedNoDupesRange(arr, val, mid + 1, right);
+            }
+        } else {
+            // rotation boundary is on the left side, right side must be
+            // ascending order
+            if (arr[mid] < val && val <= arr[right]) {
+                return searchRotatedSortedNoDupesRange(arr, val, mid + 1, right);
+            } else {
+                return searchRotatedSortedNoDupesRange(arr, val, left, mid - 1);
+            }
+        }
+    }
+    
+    /**
+     * Search a value in a roated sorted array.
+     * 
+     * e.g. array 0, 1, 2, 2, 3 rotated to 2, 3, 0, 1, 2 search for -2 return -1,
+     * search for 3 return 1
+     * 
+     * @param arr   rotated sorted array of integer
      * @return location of the search value or -1 if no match
      */
     public static int searchRotatedSorted(int arr[], int val) {
         // modified binary search, time O(lgN), space O(1)
         return searchRotatedSortedRange(arr, val, 0, arr.length - 1);
     }
-
+    
     private static int searchRotatedSortedRange(int arr[], int val, int left,
             int right) {
         if (right < left) {
@@ -141,6 +181,12 @@ public class ArrayAlgo {
         int mid = (left + right) / 2;
         if (arr[mid] == val) {
             return mid;
+        }
+        while(arr[left] == arr[mid] && left < mid) {
+            left++;
+        }
+        while(arr[mid] == arr[right] && mid < right) {
+            right++;
         }
         if (arr[left] < arr[mid]) {
             // left side is in ascending order

@@ -187,4 +187,12 @@ public class MatrixPuzzles {
             candidates.add(point);
         }
     }
+    
+    /**
+     * Rotate a matrix by 90 degree
+     * @param matrix
+     */
+    public static void roate90(int[][] matrix) {
+        
+    }
 }

@@ -122,4 +122,19 @@ public class MiscTest {
         assertEquals(expected, findSquare(a, b));
     }
     
+    @Test
+    public void findMinRangeTest() {
+        int[][] series;
+        int expected;
+        int actual;
+        
+        series = new int[][] {
+                {2, 3, 5, 10, 11},
+                {1, 2, 3, 4, 5, 6},
+                {9, 18, 30}
+        };
+        actual = findMinRange(series);
+        expected = 4;
+        assertEquals(expected, actual);
+    }
 }

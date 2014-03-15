@@ -1,7 +1,7 @@
 package name.huguogang.Algorithms;
 
 /**
- * median algorithm
+ * Median algorithm
  * 
  * @author Guogang Hu
  * 
@@ -45,12 +45,55 @@ public class Median {
                 data[head] = data[i];
                 data[i] = data[head];
                 head++;
-                // System.out.println("head: " + head);
             }
         }
         tmp = data[head];
         data[head] = data[right];
         data[right] = tmp;
         return head;
+    }
+    
+    /**
+     * Find median or two sorted arrays.
+     * 
+     * Merge from left to right until hit median index.
+     * Time: O(m+n), m: size of arr1, n: size of arr2
+     *
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public static int findMedian1(int[] arr1, int[] arr2) {
+        int len1 = arr1.length;
+        int len2 = arr2.length;
+        if(len1 + len2 == 0) {
+            throw new IllegalArgumentException("Median of empty array is not defined.");
+        }
+        int medianIdx = (len1 + len2) / 2;
+        int count = 0;
+        int pos1 = 0; 
+        int pos2 = 0;
+        int number = 0;
+        while(count < medianIdx && pos1 < len1 && pos2 < len2) {
+            if(arr1[pos1] < arr2[pos2]) {
+                number = arr1[pos1];
+                pos1++;
+            }
+            else {
+                number = arr2[pos2];
+                pos2++;
+            }
+            count++;
+        }
+        if(count == medianIdx) {
+            return number;
+        }
+        //either arr1 or arr2 run out of bound
+        if(pos1 >= len1) {
+            return arr2[medianIdx - len1];
+        }
+        else {
+            return arr1[medianIdx - len2];
+        }
     }
 }

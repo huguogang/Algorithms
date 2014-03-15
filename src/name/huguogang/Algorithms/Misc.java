@@ -117,7 +117,7 @@ public class Misc {
 
     /**
      * Given a string, find the logest substring of only two distinct
-     * characters. For example, given “aabacccaba”, you would return “accca”
+     * characters. For example, given ï¿½aabacccabaï¿½, you would return ï¿½acccaï¿½
      * 
      * @param in
      * @return
@@ -207,5 +207,55 @@ public class Misc {
             return sq;
         }
         return -1;
+    }
+    /**
+     * Given multiple sorted series, get one number from each series. Find a solution
+     * such that the range of this group of number is smallest.
+     * e.g.
+     *  Input:  2, 3, 5, 10, 11
+     *          1, 2, 3, 4, 5, 6
+     *          9, 18, 30
+     *  Solution is: 4 (if we pick 10, 6, 9 from each
+     *  
+     * @param series
+     * @return
+     */
+    public static int findMinRange(int[][] series) {
+        int minRange = Integer.MAX_VALUE;
+        
+        int numSeries = series.length;
+        int[] pointers = new int[numSeries];
+        int[] bound = new int[numSeries];
+        for(int i = 0; i < numSeries; i++) {
+            bound[i] = series[i].length;
+            if(bound[i] == 0) {
+                throw new IllegalArgumentException("Empty array is not allowed.");
+            }
+        }
+        while(true) {
+            //keep the min row, will need to advance this one in the next round
+            int minRow = 0;
+            int maxVal = Integer.MIN_VALUE;
+            int minVal = Integer.MAX_VALUE;
+            
+            for(int row = 0; row < numSeries; row++) {
+                int val = series[row][pointers[row]];
+                if(val > maxVal) {
+                    maxVal = val;
+                }
+                if(val < minVal) {
+                    minVal = val;
+                    minRow = row;
+                }
+            }
+            if(maxVal - minVal < minRange) {
+                minRange = maxVal - minVal;
+            }
+            pointers[minRow]++;
+            if(pointers[minRow] >= bound[minRow]) {
+                break;
+            }
+        }
+        return minRange;
     }
 }
