@@ -1,14 +1,12 @@
 package test.name.huguogang.Algorithms;
 
-import static org.junit.Assert.*;
+import static name.huguogang.Algorithms.StringAlgo.anagrams;
+import static name.huguogang.Algorithms.StringAlgo.wordBreak;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.util.Collection;
+
 import org.junit.Test;
-
-import static name.huguogang.Algorithms.StringAlgo.*;
 
 public class StringAlgoTest {
 
@@ -35,4 +33,24 @@ public class StringAlgoTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void anagramTest() {
+        String[] strings = {};
+        Collection<Collection<String>> result;
+        
+        strings = new String[]{"leet", "tea", "eat", "ate", "dormitory", "pea", 
+                "ape", "top", "spot", "stop", "pot", "pots"};
+        result = anagrams(strings);
+        dumpAnagrams(result);
+        assertEquals(6, result.size());
+    }
+    
+    private void dumpAnagrams(Collection<Collection<String>> groups) {
+        for(Collection<String> group : groups) {
+            for(String s : group) {
+                System.out.print(s + "    ");
+            }
+            System.out.print("\r\n");
+        }
+    }
 }
