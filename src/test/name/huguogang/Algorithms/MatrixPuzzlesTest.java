@@ -109,5 +109,26 @@ public class MatrixPuzzlesTest {
         ret = findBestSpot(matrix);
         assertEquals(expected, ret);
     }
-
+    @Test
+    public void rotate90Test() {
+        int[][] matrix;
+        int expected;
+        
+        matrix = new int[][] {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        rotate90(matrix);
+        dumpMatrix(matrix);
+        
+        matrix = new int[][] {
+                {1, 2, 3, 4},
+                {5, 6, 7, 8},
+                {9, 10, 11, 12},
+                {13, 14, 15, 16}
+        };
+        rotate90(matrix);
+        dumpMatrix(matrix);
+    }
 }

@@ -1,11 +1,11 @@
 package test.name.huguogang.Algorithms;
 
-import static org.junit.Assert.*;
+import static name.huguogang.Algorithms.Bitwise.count1s;
+import static name.huguogang.Algorithms.Bitwise.parity1;
+import static name.huguogang.Algorithms.Bitwise.parity2;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.AfterClass;
 import org.junit.Test;
-
-import static name.huguogang.Algorithms.Bitwise.*;
 
 public class BitwiseTest {
 

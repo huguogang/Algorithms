@@ -192,7 +192,26 @@ public class MatrixPuzzles {
      * Rotate a matrix by 90 degree
      * @param matrix
      */
-    public static void roate90(int[][] matrix) {
-        
+    public static void rotate90(int[][] matrix) {
+        int len = matrix.length;
+        for(int row = 0; row <= len / 2; row++) {
+            //one edge of the current layer need to rotate
+            for(int col = row; col <= len - row - 2; col++) {
+                int tmp = matrix[row][col];
+                matrix[row][col] = matrix[col][len - row - 1];
+                matrix[col][len - row - 1] = matrix[len - row - 1][len - col - 1];
+                matrix[len - row - 1][len - col - 1] = matrix[len - col - 1][row];
+                matrix[len - col - 1][row] = tmp;
+            }
+        }
+    }
+    
+    public static void dumpMatrix(int[][] matrix) {
+        for(int[] row : matrix) {
+            for(int i : row) {
+                System.out.printf("%04d ", i);
+            }
+            System.out.print("\r\n");
+        }
     }
 }
