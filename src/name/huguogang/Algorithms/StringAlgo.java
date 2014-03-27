@@ -1,8 +1,6 @@
 package name.huguogang.Algorithms;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -81,9 +79,9 @@ public class StringAlgo {
         int len = s.length();
         for(int i = 0; i < len; i++) {
             for(int j = 0; j < i; j++) {
-            if(s.charAt(i) == s.charAt(j)) {
-                return true;
-            }
+                if(s.charAt(i) == s.charAt(j)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -113,5 +111,118 @@ public class StringAlgo {
            }
        }
        return true;
+    }
+    
+    /**
+     * // Input  -> "I have  36 books, 40 pens2, and 1 notebook."
+     * // Output -> "I evah  36 skoob, 40 2snep, dna 1 koobeton."
+     * 
+     * @param in
+     * @return
+     */
+    public static String reverseString(String in) {
+        //assumptions: non alpha-numerics are word breakers
+        int len = in.length();
+        char[] buffer = new char[len];
+        //starting location for a potential string reverse
+        int headLoc = 0;
+        boolean isNumber = true; //all chars from headLoc to current loc are numbers
+        for(int i = 0; i < len; i++) {
+            char c = in.charAt(i);
+            buffer[i] = c;
+            boolean numeric = (c >= '0' && c <= '9');
+            
+            if(isNumber && numeric) {
+                continue;
+            }
+            
+            if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || numeric) {
+                isNumber = false;
+                continue;
+            }
+            
+            //word break
+            if(!isNumber) {
+                reverseSub(buffer, headLoc, i - 1);
+            }
+            isNumber = true;
+            headLoc = i + 1;
+        }
+        //might need to reverse the last word
+        if(!isNumber) {
+            reverseSub(buffer, headLoc, len - 1);
+        }
+        
+        return new String(buffer);
+    }
+    
+    private static void reverseSub(char[] arr, int start, int end) {
+        while(start < end) {
+            char tmp = arr[start];
+            arr[start] = arr[end];
+            arr[end] = tmp;
+            start++;
+            end--;
+        }
+    }
+    
+    /**
+     * Given s1; s2; s3, find whether s3 is formed by the interleaving of s1 and s2.
+     * For example, Given: s1 = ”aabcc”, s2 = ”dbbca”,
+     * When s3 = ”aadbbcbcac”, return true.
+     * When s3 = ”aadbbbaccc”, return false.
+     *  e.g.
+     *    s1: ham, s2: shap, s3: hashmap, return true  
+     * 
+     * @param a
+     * @param b
+     * @param c
+     * 
+     * @return
+     */
+    public static boolean isInterleavingString(String a, String b, String c) {
+        throw new NotImplementedException();
+    }
+    
+    /**
+     * replace all space with "%20" and return the string lenth
+     * 
+     * @param str
+     * @return
+     */
+    public static int replaceSpace(char[] str) {
+        int bufferLen = str.length;
+        int newLen = 0;
+        int strLen = 0;
+        int spaceCount = 0;
+        
+        for(char c : str) {
+            if(c == ' ') {
+                spaceCount++;
+            }
+            else if(c == 0) {
+                break;
+            }
+            strLen++;
+        }
+        newLen = strLen + 2 * spaceCount;
+        
+        if(newLen > bufferLen) {
+            throw new IllegalArgumentException("Buffer too small");
+        }
+        
+        int idx = strLen - 1;
+        for(int i = newLen - 1; i > 0;) {
+            char c = str[idx--];
+            if(c == ' ') {
+                str[i--] = '0';
+                str[i--] = '2';
+                str[i--] = '%';
+            }
+            else {
+                str[i--] = c;
+            }
+        }
+        return newLen;
     }
 }
