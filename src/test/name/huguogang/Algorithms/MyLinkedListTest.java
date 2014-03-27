@@ -25,4 +25,31 @@ public class MyLinkedListTest {
         n2.next.next = new Node(2);
         dumpList(addLists(n1, n2));
     }
+    
+    @Test
+    public void findLoopBeginningTest() {
+        Node head;
+        Node actual;
+        Node expected;
+        
+        head = null;
+        expected = null;
+        actual = findLoopBeginning(head);
+        assertEquals(expected, actual);
+        
+        head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = expected = new Node(3);
+        head.next.next.next = new Node(4);
+        head.next.next.next.next = new Node(5);
+        head.next.next.next.next.next = expected;
+        actual = findLoopBeginning(head);
+        assertEquals(expected, actual);
+        
+        head = new Node(1);
+        head.next = new Node(2);
+        expected = null;
+        actual = findLoopBeginning(head);
+        assertEquals(expected, actual);
+    }
 }
