@@ -13,6 +13,10 @@ public class BinaryTree {
             this.element = element;
         }
     }
+    public static<T> boolean isBalanced(TreeNode<T> root) {
+        //by definition, left and right children depth are within 1
+        throw new NotImplementedException();
+    }
     /**
      * Parse a string representation of tree in Newick tree format
      * 

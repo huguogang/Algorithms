@@ -119,7 +119,7 @@ public class Misc {
 
     /**
      * Given a string, find the logest substring of only two distinct
-     * characters. For example, given ï¿½aabacccabaï¿½, you would return ï¿½acccaï¿½
+     * characters. For example, given ï¿½ï¿½ï¿½aabacccabaï¿½ï¿½ï¿½, you would return ï¿½ï¿½ï¿½acccaï¿½ï¿½ï¿½
      * 
      * @param in
      * @return
@@ -262,9 +262,9 @@ public class Misc {
     }
     
     /**
-     * Given a string containing just the characters ’(’, ’)’, ’{’, ’}’, ’[’ and ’]’, 
+     * Given a string containing just the characters ï¿½(ï¿½, ï¿½)ï¿½, ï¿½{ï¿½, ï¿½}ï¿½, ï¿½[ï¿½ and ï¿½]ï¿½, 
      * determine if the input string is valid. The brackets must close in the 
-     * correct order, ”()” and ”()[]” are all valid but ”(]” and ”([)]” are not.
+     * correct order, ï¿½()ï¿½ and ï¿½()[]ï¿½ are all valid but ï¿½(]ï¿½ and ï¿½([)]ï¿½ are not.
      * 
      * @param s
      * @return
@@ -291,5 +291,27 @@ public class Misc {
             }
         }
         return true;
+    }
+    
+    /**
+     * Calculate Fibonacci using tail recursion.
+     * 
+     * @param n
+     * @return
+     */
+    public static int fibonacciTailR(int n) {
+        return fibonacciTailR(n, 0, 1);
+    }
+    /**
+     * Fibonacci using tail recursion
+     * 
+     * @param n         It effectively a count down counter
+     * @param prev1     f(n - 2)
+     * @param prev      f(n - 1)
+     * @return
+     */
+    private static int fibonacciTailR(int n, int prev1, int prev) {
+        if(n == 1) return prev;
+        return fibonacciTailR(n - 1, prev, prev + prev1);
     }
 }

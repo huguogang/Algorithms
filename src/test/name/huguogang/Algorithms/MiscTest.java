@@ -169,4 +169,29 @@ public class MiscTest {
         actual = validateParentheses(s);
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void fibonacciTest() {
+        int n, actual, expected;
+        
+        n = 1;
+        expected = 1;
+        actual = fibonacciTailR(n);
+        assertEquals(expected, actual);
+        
+        n = 2;
+        expected = 1;
+        actual = fibonacciTailR(n);
+        assertEquals(expected, actual);
+        
+        n = 3;
+        expected = 2;
+        actual = fibonacciTailR(n);
+        assertEquals(expected, actual);
+        
+        n = 4;
+        expected = 3;
+        actual = fibonacciTailR(n);
+        assertEquals(expected, actual);
+    }
 }
