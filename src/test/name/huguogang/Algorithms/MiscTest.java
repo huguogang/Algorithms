@@ -137,4 +137,36 @@ public class MiscTest {
         expected = 4;
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void validateParenthesesTest() {
+        String s;
+        boolean expected;
+        boolean actual;
+        
+        s = "()";
+        expected = true;
+        actual = validateParentheses(s);
+        assertEquals(expected, actual);
+        
+        s = "()[]";
+        expected = true;
+        actual = validateParentheses(s);
+        assertEquals(expected, actual);
+        
+        s = "";
+        expected = true;
+        actual = validateParentheses(s);
+        assertEquals(expected, actual);
+        
+        s = "({})]";
+        expected = false;
+        actual = validateParentheses(s);
+        assertEquals(expected, actual);
+        
+        s = "({)";
+        expected = false;
+        actual = validateParentheses(s);
+        assertEquals(expected, actual);
+    }
 }

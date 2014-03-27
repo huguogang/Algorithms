@@ -1,5 +1,10 @@
 package name.huguogang.Algorithms;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -14,9 +19,9 @@ public class StringAlgo {
     /**
      * Given a string s and a dictionary of words dict, determine if s can be
      * segmented into a space-separated sequence of one or more dictionary
-     * words. For example, given s = “leetcode”, dict = ["leet", "code"].
+     * words. For example, given s = "leetcode", dict = ["leet", "code"].
      * 
-     * Return true because “leetcode” can be segmented as “leet code”.
+     * Return true because "leetcode" can be segmented as "leet code".
      * 
      * @param s
      * @param dict
@@ -224,5 +229,28 @@ public class StringAlgo {
             }
         }
         return newLen;
+    }
+    
+    /**
+     * Given an array of strings, return all groups of strings that are anagrams.
+     * Note: All inputs will be in lower-case.
+     * 
+     * @param strs
+     * @return
+     */
+    public static Collection<Collection<String>> anagrams(String[] strs) {
+        HashMap<String, Collection<String>> map = new HashMap<String, Collection<String>>();
+        for(String s : strs) {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String anaRoot = new String(chars);
+            ArrayList<String> anagrams;
+            if((anagrams = (ArrayList<String>) map.get(anaRoot)) == null) {
+                anagrams = new ArrayList<String>();
+                map.put(anaRoot, anagrams);
+            }
+            anagrams.add(s);
+        }
+        return map.values();
     }
 }

@@ -1,5 +1,7 @@
 package name.huguogang.Algorithms;
 
+import java.util.Stack;
+
 /**
  * Miscellaneous small algorithms
  * 
@@ -257,5 +259,37 @@ public class Misc {
             }
         }
         return minRange;
+    }
+    
+    /**
+     * Given a string containing just the characters ’(’, ’)’, ’{’, ’}’, ’[’ and ’]’, 
+     * determine if the input string is valid. The brackets must close in the 
+     * correct order, ”()” and ”()[]” are all valid but ”(]” and ”([)]” are not.
+     * 
+     * @param s
+     * @return
+     */
+    public static boolean validateParentheses(String s) {
+        Stack<Integer> stack = new Stack<Integer>();
+        String left = "([{";
+        String right = ")]}";
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int idx;
+            if((idx = left.indexOf(c)) >= 0) {
+                stack.push(idx);
+            }
+            else {
+                //assumption: string contains "just" the characters ...
+                if(stack.isEmpty()) {
+                    return false;
+                }
+                idx = right.indexOf(c);
+                if((stack.pop()) != idx) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
