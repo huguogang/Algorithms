@@ -10,6 +10,42 @@ import static name.huguogang.Algorithms.Sorting.*;
 public class SortingTest {
 
     @Test
+    public void insertionSortTest() {
+        int[] input;
+        int[] expected;
+
+        input = new int[] {};
+        expected = new int[] {};
+        insertionSort(input);
+        assertArrayEquals(expected, input);
+
+        input = new int[] {1, 2, 3, 4};
+        expected = new int[] {1, 2, 3, 4};
+        insertionSort(input);
+        ArrayAlgo.printArray(input);
+        assertArrayEquals(expected, input);
+        
+        input = new int[] {4, 3, 2, 1};
+        expected = new int[] {1, 2, 3, 4};
+        insertionSort(input);
+        ArrayAlgo.printArray(input);
+        assertArrayEquals(expected, input);
+        
+        input = new int[] {3, 1, 4, 2};
+        expected = new int[] {1, 2, 3, 4};
+        insertionSort(input);
+        ArrayAlgo.printArray(input);
+        assertArrayEquals(expected, input);
+        
+        input = new int[] {3, 1, 4, 2, 2, 1, 3, 3, 1};
+        expected = new int[] {1, 1, 1, 2, 2, 3, 3, 3, 4};
+        insertionSort(input);
+        ArrayAlgo.printArray(input);
+        assertArrayEquals(expected, input);
+    }
+
+    
+    @Test
     public void quickSortTest() {
         int[] input;
         int[] expected;
