@@ -112,7 +112,6 @@ public class MatrixPuzzlesTest {
     @Test
     public void rotate90Test() {
         int[][] matrix;
-        int expected;
         
         matrix = new int[][] {
                 {1, 2, 3},

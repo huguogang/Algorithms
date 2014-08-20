@@ -1,8 +1,9 @@
 package test.name.huguogang.Algorithms;
 
-import static name.huguogang.Algorithms.StringAlgo.*;
-import static org.junit.Assert.assertEquals;
 import static name.huguogang.Algorithms.StringAlgo.anagrams;
+import static name.huguogang.Algorithms.StringAlgo.isInterleavingString;
+import static name.huguogang.Algorithms.StringAlgo.replaceSpace;
+import static name.huguogang.Algorithms.StringAlgo.reverseString;
 import static name.huguogang.Algorithms.StringAlgo.wordBreak;
 import static org.junit.Assert.assertEquals;
 

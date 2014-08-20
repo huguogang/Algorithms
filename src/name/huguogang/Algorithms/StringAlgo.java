@@ -3,7 +3,6 @@ package name.huguogang.Algorithms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -173,9 +172,9 @@ public class StringAlgo {
     
     /**
      * Given s1; s2; s3, find whether s3 is formed by the interleaving of s1 and s2.
-     * For example, Given: s1 = ”aabcc”, s2 = ”dbbca”,
-     * When s3 = ”aadbbcbcac”, return true.
-     * When s3 = ”aadbbbaccc”, return false.
+     * For example, Given: s1 = aabcc, s2 = dbbca,
+     * When s3 = aadbbcbcac, return true.
+     * When s3 = aadbbbaccc, return false.
      *  e.g.
      *    s1: ham, s2: shap, s3: hashmap, return true  
      * 
