@@ -1,7 +1,5 @@
 package name.huguogang.Algorithms;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import name.huguogang.Algorithms.BinaryTree.TreeNode;
 
 public class MyLinkedList {
     public static class Node {
