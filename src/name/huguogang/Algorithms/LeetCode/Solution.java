@@ -1,7 +1,9 @@
 package name.huguogang.Algorithms.LeetCode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -52,18 +54,23 @@ public class Solution {
     }
 
     /**
-     * Sort Colors
+     * Candy
      * 
-     * Given an array with n objects colored red, white or blue, sort them so that objects of the same color are
-     * adjacent, with the colors in the order red, white and blue.
+     * There are N children standing in a line. Each child is assigned a rating value.
      * 
-     * Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+     * You are giving candies to these children subjected to the following requirements:
      * 
-     * @param A
+     * Each child must have at least one candy.
+     * Children with a higher rating get more candies than their neighbors.
+     * What is the minimum candies you must give?
+     * 
+     * @param ratings
+     * @return
      */
-    public void sortColors(int[] A) {
-
+    public int candy(int[] ratings) {
+        // * all the valley bottoms (child on both sides have higher ratings) must be 1
+        // * peak's candy is same as max(left, right)
+        // * if neighbors ratings are the same, their candy count are the same
+        throw new NotImplementedException();
     }
-
-    
 }

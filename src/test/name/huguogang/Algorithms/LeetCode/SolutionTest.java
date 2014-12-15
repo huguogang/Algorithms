@@ -7,6 +7,7 @@ import static test.name.huguogang.Algorithms.LeetCode.Util.printList;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printListList;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printTreeByLevel;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printListArray;
+import static test.name.huguogang.Algorithms.LeetCode.Util.printMatrix;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -42,53 +43,6 @@ public class SolutionTest {
         ret = solution.maxProduct(A);
         assertEquals(expected, ret);
     }
-
-    @Test
-    public void testSortColors() {
-        int[] A;
-
-        A = null;
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] {};
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 1 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 2 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 0 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 0, 0, 0 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 1, 1, 1 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 2, 2, 2 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 0, 1, 2 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 2, 1, 0 };
-        solution.sortColors(A);
-        printArray(A);
-
-        A = new int[] { 0, 2, 1 };
-        solution.sortColors(A);
-        printArray(A);
-    }
+    
+   
 }

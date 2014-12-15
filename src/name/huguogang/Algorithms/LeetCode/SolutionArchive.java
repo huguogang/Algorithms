@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -3056,5 +3057,658 @@ public class SolutionArchive {
             head = next;
         }
         return dummyHead.next;
+    }
+
+    /**
+     * Anagrams
+     * 
+     * Given an array of strings, return all groups of strings that are anagrams.
+     * 
+     * Note: All inputs will be in lower-case.
+     * 
+     * @param strs
+     * @return
+     */
+    public List<String> anagrams(String[] strs) {
+        List<String> ret = new ArrayList<String>();
+        if (strs == null) {
+            return ret;
+        }
+
+        HashMap<String, List<String>> group = new HashMap<String, List<String>>();
+        for (String s : strs) {
+            char[] arr = s.toCharArray();
+            Arrays.sort(arr);
+            String key = new String(arr);
+            List<String> val;
+            if (group.containsKey(key)) {
+                val = group.get(key);
+            }
+            else {
+                val = new ArrayList<String>();
+                group.put(key, val);
+            }
+            val.add(s);
+        }
+
+        for (List<String> lst : group.values()) {
+            if (lst.size() > 1) {
+                ret.addAll(lst);
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Find Peak Element
+     * 
+     * A peak element is an element that is greater than its neighbors.
+     * 
+     * Given an input array where num[i] <> num[i+1], find a peak element and return its index.
+     * 
+     * You may imagine that num[-1] = num[n] = -infinity.
+     * 
+     * For example, in array [1, 2, 3, 1], 3 is a peak element and your function should return the index number 2.
+     * 
+     * @param num
+     * @return
+     */
+    public int findPeakElement(int[] num) {
+        // assuming our goal is to find any peak, we can use binary search, thus achieve log complexity
+        if (num == null || num.length == 0) {
+            return -1; // no peak
+        }
+        int len = num.length;
+        return findPeakElementHelper(num, 0, len - 1);
+    }
+
+    private int findPeakElementHelper(int[] num, int start, int end) {
+        if (start > end) {
+            return -1;
+        }
+        int mid = (start + end) / 2;
+        int len = num.length;
+        boolean biggerThanPrevious = (mid == 0 || num[mid] > num[mid - 1]);
+        boolean biggerThanFollowing = (mid == len - 1 || num[mid] > num[mid + 1]);
+        if (biggerThanFollowing && biggerThanPrevious) {
+            return mid;
+        }
+        if (biggerThanFollowing && !biggerThanPrevious) {
+            // on the down slope, peak is on our left
+            return findPeakElementHelper(num, start, mid - 1);
+        }
+        else if (!biggerThanFollowing && biggerThanPrevious) {
+            // on the up slop, peak is on the right
+            return findPeakElementHelper(num, mid + 1, end);
+        }
+        else {
+            // in the valley, we will have peak on either side, just pick left side here
+            return findPeakElementHelper(num, start, mid - 1);
+        }
+    }
+
+    public int findPeakElementSlow(int[] num) {
+        if (num == null || num.length == 0) {
+            return -1; // no peak
+        }
+        int len = num.length;
+        for (int i = 0; i < len; ++i) {
+            boolean biggerThanPrevious = (i == 0 || num[i] > num[i - 1]);
+            boolean biggerThanFollowing = (i == len - 1 || num[i] > num[i + 1]);
+            if (biggerThanFollowing && biggerThanPrevious) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Triangle
+     * 
+     * Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the
+     * row below.
+     * 
+     * For example, given the following triangle
+     * [
+     * [2],
+     * [3,4],
+     * [6,5,7],
+     * [4,1,8,3]
+     * ]
+     * The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+     * 
+     * Note:
+     * Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the
+     * triangle.
+     * 
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        // search bottom up, code can be a lot simpler if we are allowed to modify triangle
+        int len = triangle.size();
+        int[] minCurrent = new int[len]; // min path sum of the current row
+        int[] minLower = new int[len]; // min path sum of lower row
+        for (int level = len - 1; level >= 0; --level) {
+            List<Integer> row = triangle.get(level);
+            for (int col = 0; col < row.size(); ++col) {
+                if (level == len - 1) {
+                    minCurrent[col] = row.get(col);
+                }
+                else {
+                    minCurrent[col] = row.get(col)
+                            + Math.min(minLower[col], minLower[col + 1]);
+                }
+            }
+
+            // exchange
+            int[] tmp = minCurrent;
+            minCurrent = minLower;
+            minLower = tmp;
+        }
+        return minLower[0];
+    }
+
+    /**
+     * Sort Colors
+     * 
+     * Given an array with n objects colored red, white or blue, sort them so that objects of the same color are
+     * adjacent, with the colors in the order red, white and blue.
+     * 
+     * Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+     * 
+     * @param A
+     */
+    public void sortColors(int[] A) {
+        if (A == null) {
+            return;
+        }
+        int len = A.length;
+        int red = 0;
+        int blue = len - 1;
+        for (int i = 0; i <= blue;) {
+            if (A[i] == 0) {
+                A[i] = A[red];
+                A[red] = 0;
+                ++red;
+                ++i;
+            }
+            else if (A[i] == 2) {
+                A[i] = A[blue];
+                A[blue] = 2;
+                --blue;
+            }
+            else {
+                ++i;
+            }
+        }
+    }
+
+    /**
+     * Reorder List
+     * 
+     * Given a singly linked list L: L0->L1->…->Ln-1->Ln,
+     * reorder it to: L0->Ln->L1->Ln-1->L2->Ln-2->…
+     * 
+     * You must do this in-place without altering the nodes' values.
+     * 
+     * For example,
+     * Given {1,2,3,4}, reorder it to {1,4,2,3}.
+     * 
+     * @param head
+     */
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return;
+        }
+
+        // idea: reverse second half, then merge
+        int len = 1;
+        ListNode node = head;
+        while (node != null) {
+            node = node.next;
+            ++len;
+        }
+
+        int mid = (len + 1) / 2;
+        // go to the node right before mid node
+        node = head;
+        for (int i = 0; i < mid - 1; ++i) {
+            node = node.next;
+        }
+        ListNode midNode = node.next;
+        node.next = null;
+
+        midNode = reverseLinkedList(midNode);
+
+        head = zipLists(head, midNode);
+    }
+
+    /**
+     * reverse linked list
+     * 
+     * @param head
+     * @return Head of reversed list
+     */
+    public ListNode reverseLinkedList(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = dummy.next;
+            dummy.next = head;
+            head = next;
+        }
+
+        return dummy.next;
+    }
+
+    /**
+     * Interleave two linked lists. Head 1 starts first
+     * 
+     * Assumption: head1 is not null
+     * 
+     * @param head1
+     * @param head2
+     * @return
+     */
+    public ListNode zipLists(ListNode head1, ListNode head2) {
+        ListNode head = head1;
+        while (head1 != null && head2 != null) {
+            ListNode tmp = head1.next;
+            head1.next = head2;
+            head1 = tmp;
+
+            tmp = head2.next;
+            head2.next = head1;
+            head2 = tmp;
+        }
+        return head;
+    }
+
+    /**
+     * Container With Most Water
+     * 
+     * Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical
+     * lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together
+     * with x-axis forms a container, such that the container contains the most water.
+     * 
+     * Note: You may not slant the container.
+     * 
+     * @param height
+     * @return
+     */
+    public int maxArea(int[] height) {
+        if (height == null || height.length < 2) {
+            return 0;
+        }
+        int max = 0;
+        int len = height.length;
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+            int area = Math.min(height[left], height[right]) * (right - left);
+            if (area > max) {
+                max = area;
+            }
+            // the shorter side won't be able to form a bigger container
+            if (height[left] <= height[right]) {
+                ++left;
+            }
+            else {
+                --right;
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Rotate Image
+     * 
+     * You are given an n x n 2D matrix representing an image.
+     * 
+     * Rotate the image by 90 degrees (clockwise).
+     * 
+     * Follow up:
+     * Could you do this in-place?
+     * 
+     * @param matrix
+     */
+    public void rotate(int[][] matrix) {
+        if (matrix == null) {
+            return;
+        }
+        // in-place 90 degree clockwise
+        // clockwise 90 degree (x, y) -> (size - 1 - y, x)
+        // we will rotate layer by layer, starting from outside
+        int size = matrix.length;
+        for (int layer = 0; layer < size / 2; ++layer) {
+            // loop top edge of the layer
+            for (int x = layer; x <= size - 1 - layer - 1; ++x) {
+                int tmp = matrix[layer][x];
+                matrix[layer][x] = matrix[size - 1 - x][layer];
+                matrix[size - 1 - x][layer] = matrix[size - 1 - layer][size - 1
+                        - x];
+                matrix[size - 1 - layer][size - 1 - x] = matrix[x][size - 1
+                        - layer];
+                matrix[x][size - 1 - layer] = tmp;
+            }
+        }
+    }
+
+    /**
+     * Unique Paths
+     * 
+     * A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+     * 
+     * The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right
+     * corner of the grid (marked 'Finish' in the diagram below).
+     * 
+     * How many possible unique paths are there?
+     * 
+     * @param m
+     * @param n
+     * @return
+     */
+    public int uniquePaths(int m, int n) {
+        if (m == 1 || n == 1) {
+            return 1;
+        }
+        // should be same of (m + n - 2) choose (m - 1)
+
+        int[] count = new int[m];
+        for (int i = 0; i < m; ++i) {
+            count[i] = 1;
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j < m; ++j) {
+                count[j] += count[j - 1];
+            }
+        }
+        return count[m - 1];
+    }
+
+    /**
+     * Linked List Cycle II
+     * 
+     * Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+     * 
+     * Follow up:
+     * Can you solve it without using extra space?
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow1, slow2, fast;
+        slow1 = slow2 = fast = head;
+        boolean hasCycle = false;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow1 = slow1.next;
+            if (fast == slow1) {
+                hasCycle = true;
+                break;
+            }
+        }
+        if (!hasCycle) {
+            return null;
+        }
+        while (slow1 != slow2) {
+            slow1 = slow1.next;
+            slow2 = slow2.next;
+        }
+        return slow1;
+    }
+
+    /**
+     * Partition List
+     * 
+     * Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or
+     * equal to x.
+     * 
+     * You should preserve the original relative order of the nodes in each of the two partitions.
+     * 
+     * For example,
+     * Given 1->4->3->2->5->2 and x = 3,
+     * return 1->2->2->4->3->5.
+     * 
+     * @param head
+     * @param x
+     * @return
+     */
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode partition = dummy; // point where smaller node can be inserted
+        ListNode current = dummy;
+        while (current.next != null) {
+            if (current.next.val < x) {
+                if (current == partition) {
+                    // already in the right place
+                    current = partition = partition.next;
+
+                }
+                else {
+                    // move next to the next of partition
+                    ListNode smallNode = current.next;
+                    current.next = current.next.next;
+                    smallNode.next = partition.next;
+                    partition.next = smallNode;
+                    partition = smallNode;
+                }
+                // move to next
+            }
+            else {
+                // move to next
+                current = current.next;
+            }
+        }
+        return dummy.next;
+    }
+
+    /**
+     * Search a 2D Matrix 
+     * 
+     * Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following
+     * properties:
+     * 
+     * Integers in each row are sorted from left to right.
+     * The first integer of each row is greater than the last integer of the previous row.
+     * For example,
+     * 
+     * Consider the following matrix:
+     * 
+     * [
+     * [1, 3, 5, 7],
+     * [10, 11, 16, 20],
+     * [23, 30, 34, 50]
+     * ]
+     * Given target = 3, return true.
+     * 
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        nRows = matrix.length;
+        nCols = matrix[0].length;
+        int size = nRows * nCols;
+        return binarySearchMatrix(matrix, 0, size - 1, target);
+    }
+
+    private class Coord {
+        public int row;
+        public int col;
+    }
+
+    private int nRows;
+    private int nCols;
+
+    private Coord getCoord(int n) {
+        Coord ret = new Coord();
+        ret.row = n / nCols;
+        ret.col = n % nCols;
+        return ret;
+    }
+
+    private boolean binarySearchMatrix(int[][] matrix, int start, int end,
+            int target) {
+        if (start > end) {
+            return false;
+        }
+        int mid = (start + end) / 2;
+        Coord coord = getCoord(mid);
+        int num = matrix[coord.row][coord.col];
+        if (num == target) {
+            return true;
+        }
+        if (num < target) {
+            return binarySearchMatrix(matrix, mid + 1, end, target);
+        }
+        else {
+            // num > target
+            return binarySearchMatrix(matrix, start, mid - 1, target);
+        }
+    }
+    /**
+     * Edit Distance
+     * 
+     * Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each
+     * operation is counted as 1 step.)
+     * 
+     * You have the following 3 operations permitted on a word:
+     * 
+     * a) Insert a character
+     * b) Delete a character
+     * c) Replace a character
+     * 
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistance(String word1, String word2) {
+        int len1 = word1.length(), len2 = word2.length();
+        int[] previous = new int[len2 + 1]; // min distance of word2 from empty to full, to word1 substring
+        int[] current = new int[len2 + 1];
+        for (int i = 0; i < len2 + 1; ++i) {
+            previous[i] = i; // word2 min distance against empty string
+        }
+        for (int idx1 = 1; idx1 <= len1; ++idx1) {
+            current[0] = idx1; // word1 min distance against empty string
+            for (int idx2 = 1; idx2 <= len2; ++idx2) {
+                int d1 = 1 + previous[idx2];
+                int d2 = 1 + current[idx2 - 1];
+                int d3 = previous[idx2 - 1];
+                if (word1.charAt(idx1 - 1) != word2.charAt(idx2 - 1)) {
+                    ++d3;
+                }
+                current[idx2] = Math.min(d1, d2);
+                current[idx2] = Math.min(current[idx2], d3);
+            }
+            int[] tmp = current;
+            current = previous; // reuse array
+            previous = tmp;
+        }
+        return previous[len2];
+    }
+
+    /**
+     * Binary Tree Zigzag Level Order Traversal
+     * 
+     * Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then
+     * right to left for the next level and alternate between).
+     * 
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        List<TreeNode> previousLevel = new ArrayList<TreeNode>();
+        if (root != null) {
+            previousLevel.add(root);
+        }
+        int direction = 0; // 0: left to right, 1: right to left
+        while (!previousLevel.isEmpty()) {
+            LinkedList<Integer> level = new LinkedList<Integer>();
+            List<TreeNode> currentLevel = new ArrayList<TreeNode>();
+            for (TreeNode n : previousLevel) {
+                // store to return
+                if (direction == 0) {
+                    level.add(n.val);
+                }
+                else {
+                    level.addFirst(n.val);
+                }
+                if (n.left != null) {
+                    currentLevel.add(n.left);
+                }
+                if (n.right != null) {
+                    currentLevel.add(n.right);
+                }
+            }
+            ret.add(level);
+            // prepare for next iteration
+            direction = direction ^ 1;
+            previousLevel = currentLevel;
+        }
+        return ret;
+    }
+
+    /**
+     * Restore IP Addresses 
+     * 
+     * Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+     * 
+     * For example:
+     * Given "25525511135",
+     * 
+     * return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+     * 
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> ret = new ArrayList<String>();
+        String[] ip = new String[4];
+        restoreIPAddressHelper(s, 0, 0, ret, ip);
+        return ret;
+    }
+
+    private void restoreIPAddressHelper(String s, int segment, int start,
+            List<String> ret, String[] ip) {
+        if (segment == 4) {
+            if (start == s.length()) {
+                ret.add(ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3]);
+            }
+            else {
+                return;
+            }
+        }
+        if (segment == 3 && (s.length() - start > 3)) {
+            return;
+        }
+
+        int number = 0;
+        for (int i = start; i <= start + 3 && i < s.length(); ++i) {
+            number = number * 10 + s.charAt(i) - '0';
+            if (number <= 255) {
+                String ipStr = s.substring(start, i + 1);
+                ip[segment] = ipStr;
+                restoreIPAddressHelper(s, segment + 1, i + 1, ret, ip);
+            }
+            if (number == 0) {
+                // based on OJ feedback 000.000.000.000 is illegal format
+                return;
+            }
+        }
     }
 }

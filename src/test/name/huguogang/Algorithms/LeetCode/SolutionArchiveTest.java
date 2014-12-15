@@ -7,6 +7,7 @@ import static test.name.huguogang.Algorithms.LeetCode.Util.printLinkedList;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printList;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printListArray;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printListList;
+import static test.name.huguogang.Algorithms.LeetCode.Util.printMatrix;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printTreeByLevel;
 
 import java.util.ArrayList;
@@ -1651,4 +1652,297 @@ public class SolutionArchiveTest {
         printLinkedList(ret);
 
     }
+
+    @Test
+    public void testAnagrams() {
+        String[] strs;
+        List<String> ret;
+
+        strs = new String[] {};
+        ret = solution.anagrams(strs);
+        printList(ret);
+
+        strs = new String[] { "", "" };
+        ret = solution.anagrams(strs);
+        printList(ret);
+
+        strs = new String[] { "ab", "ba", "abc", "cba" };
+        ret = solution.anagrams(strs);
+        printList(ret);
+
+    }
+
+    @Test
+    public void testFindPeakElement() {
+        int[] num;
+        int expected;
+
+        num = new int[] {};
+        expected = -1;
+        assertEquals(expected, solution.findPeakElement(num));
+
+        num = new int[] { 1 };
+        expected = 0;
+        assertEquals(expected, solution.findPeakElement(num));
+
+        num = new int[] { 1, 2, 3, 1 };
+        expected = 2;
+        assertEquals(expected, solution.findPeakElement(num));
+
+        num = new int[] { 1, 2, 3 };
+        expected = 2;
+        assertEquals(expected, solution.findPeakElement(num));
+
+        num = new int[] { 3, 2, 1 };
+        expected = 0;
+        assertEquals(expected, solution.findPeakElement(num));
+    }
+
+    @Test
+    public void testMinimumTotal() {
+        List<List<Integer>> triangle;
+        List<Integer> row;
+        int expected;
+
+        expected = -10;
+        triangle = new ArrayList<List<Integer>>();
+        row = new ArrayList<Integer>();
+        row.add(-10);
+        triangle.add(row);
+        assertEquals(expected, solution.minimumTotal(triangle));
+
+        expected = -20;
+        row = new ArrayList<Integer>();
+        row.add(-10);
+        row.add(0);
+        triangle.add(row);
+        assertEquals(expected, solution.minimumTotal(triangle));
+    }
+
+    @Test
+    public void testSortColors() {
+        int[] A;
+
+        A = null;
+        solution.sortColors(A);
+        // printArray(A);
+        assertEquals(null, A);
+
+        A = new int[] {};
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 1 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 2 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 0 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 0, 0, 0 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 1, 1, 1 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 2, 2, 2 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 0, 1, 2 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 2, 1, 0 };
+        solution.sortColors(A);
+        printArray(A);
+
+        A = new int[] { 0, 2, 1 };
+        solution.sortColors(A);
+        printArray(A);
+    }
+
+    @Test
+    public void testReverseLinkedList() {
+        ListNode head, ret;
+
+        head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        ret = solution.reverseLinkedList(head);
+        printLinkedList(ret);
+    }
+
+    @Test
+    public void testZipLists() {
+        ListNode head1, head2, ret;
+
+        head1 = new ListNode(1);
+        head1.next = new ListNode(2);
+        head1.next.next = new ListNode(3);
+        head2 = new ListNode(4);
+        head2.next = new ListNode(5);
+        head2.next.next = new ListNode(6);
+        ret = solution.zipLists(head1, head2);
+        printLinkedList(ret);
+    }
+
+    @Test
+    public void testReorderList() {
+        ListNode head1, head2;
+
+        head1 = null;
+        solution.reorderList(head1);
+        printLinkedList(head1);
+
+        head1 = new ListNode(1);
+        solution.reorderList(head1);
+        printLinkedList(head1);
+
+        head1 = new ListNode(1);
+        head1.next = new ListNode(2);
+        solution.reorderList(head1);
+        printLinkedList(head1);
+
+        head1 = new ListNode(1);
+        head1.next = new ListNode(2);
+        head1.next.next = head2 = new ListNode(3);
+        head2.next = new ListNode(4);
+        solution.reorderList(head1);
+        printLinkedList(head1);
+
+        head1 = new ListNode(1);
+        head1.next = new ListNode(2);
+        head1.next.next = head2 = new ListNode(3);
+        head2.next = new ListNode(4);
+        head2.next.next = new ListNode(5);
+        solution.reorderList(head1);
+        printLinkedList(head1);
+    }
+
+    @Test
+    public void testMaxArea() {
+        int[] height;
+        int expected;
+
+        height = new int[] { 2, 1 };
+        expected = 1;
+        assertEquals(expected, solution.maxArea(height));
+
+        height = new int[] {};
+        expected = 0;
+        assertEquals(expected, solution.maxArea(height));
+
+        height = new int[] { 2, 3, 4, 1, 9 };
+        expected = 9;
+        assertEquals(expected, solution.maxArea(height));
+    }
+
+    @Test
+    public void testRotate() {
+        int[][] matrix;
+
+        matrix = new int[][] {
+                { 1 }
+        };
+        solution.rotate(matrix);
+        printMatrix(matrix);
+
+        matrix = new int[][] {
+                { 1, 2 },
+                { 3, 4 }
+        };
+        solution.rotate(matrix);
+        printMatrix(matrix);
+
+        matrix = new int[][] {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 7, 8, 9 }
+        };
+        solution.rotate(matrix);
+        printMatrix(matrix);
+    }
+
+    @Test
+    public void testUniquePaths() {
+        int m, n, expected;
+
+        m = 1;
+        n = 3;
+        expected = 1;
+        assertEquals(expected, solution.uniquePaths(m, n));
+
+        m = 2;
+        n = 3;
+        expected = 3;
+        assertEquals(expected, solution.uniquePaths(m, n));
+
+        m = 3;
+        n = 5;
+        expected = 15;
+        assertEquals(expected, solution.uniquePaths(m, n));
+    }
+
+    @Test
+    public void testPartition() {
+        ListNode head, ret;
+        int x;
+
+        head = new ListNode(1);
+        head.next = new ListNode(4);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(2);
+        head.next.next.next.next = new ListNode(5);
+        head.next.next.next.next.next = new ListNode(2);
+        x = 3;
+        ret = solution.partition(head, x);
+        printLinkedList(ret);
+    }
+    @Test
+    public void testMinDistance() {
+        String word1, word2;
+        int expected;
+        
+        word1 = word2 = "Hello World";
+        expected = 0;
+        assertEquals(expected, solution.minDistance(word1, word2));
+        
+        word1 = "World";
+        word2 = "Word";
+        expected = 1;
+        assertEquals(expected, solution.minDistance(word1, word2));
+        
+        word1 = "World";
+        word2 = "Words";
+        expected = 2;
+        assertEquals(expected, solution.minDistance(word1, word2));
+    }
+
+    @Test
+    public void testRestoreIPAddress() {
+        String s;
+        List<String> ret;
+        
+        s = "25525511135";
+        ret = solution.restoreIpAddresses(s);
+        printList(ret);
+        
+        s = "0000";
+        ret = solution.restoreIpAddresses(s);
+        printList(ret);
+        
+        s="010010";
+        ret = solution.restoreIpAddresses(s);
+        printList(ret);
+        
+    }
+    
 }

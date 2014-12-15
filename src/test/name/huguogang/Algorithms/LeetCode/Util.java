@@ -61,4 +61,17 @@ public class Util {
         printListList(level);
     }
     
+    public static void printMatrix(int[][] matrix) {
+        System.out.println("[");
+        for(int[] row : matrix) {
+            System.out.print("\t[");
+            for(int num: row) {
+                System.out.print(num);
+                System.out.print(",\t");
+            }
+            System.out.print("]\r\n");
+        }
+        System.out.println("]");
+    }
+    
 }
