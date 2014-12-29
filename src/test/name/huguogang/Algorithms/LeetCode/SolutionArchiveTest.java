@@ -1906,20 +1906,21 @@ public class SolutionArchiveTest {
         ret = solution.partition(head, x);
         printLinkedList(ret);
     }
+
     @Test
     public void testMinDistance() {
         String word1, word2;
         int expected;
-        
+
         word1 = word2 = "Hello World";
         expected = 0;
         assertEquals(expected, solution.minDistance(word1, word2));
-        
+
         word1 = "World";
         word2 = "Word";
         expected = 1;
         assertEquals(expected, solution.minDistance(word1, word2));
-        
+
         word1 = "World";
         word2 = "Words";
         expected = 2;
@@ -1930,19 +1931,67 @@ public class SolutionArchiveTest {
     public void testRestoreIPAddress() {
         String s;
         List<String> ret;
-        
+
         s = "25525511135";
         ret = solution.restoreIpAddresses(s);
         printList(ret);
-        
+
         s = "0000";
         ret = solution.restoreIpAddresses(s);
         printList(ret);
-        
-        s="010010";
+
+        s = "010010";
         ret = solution.restoreIpAddresses(s);
         printList(ret);
-        
+
     }
-    
+
+    @Test
+    public void findMinTest() {
+        int[] num;
+        int expected;
+
+        num = new int[] { 4, 5, 6, 7, 0, 1, 2 };
+        expected = 0;
+        assertEquals(expected, solution.findMin(num));
+
+        num = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+        expected = 0;
+        assertEquals(expected, solution.findMin(num));
+    }
+
+    @Test
+    public void testRemoveDuplicatesII() {
+        int[] A;
+        int expected;
+
+        A = new int[] { 1, 1, 1, 2, 2, 3 };
+        expected = 5;
+        assertEquals(expected, solution.removeDuplicatesII(A));
+
+        A = new int[] {};
+        expected = 0;
+        assertEquals(expected, solution.removeDuplicatesII(A));
+    }
+
+    @Test
+    public void testSearch() {
+        int[] A;
+        int target, expected;
+
+        A = new int[] {};
+        target = 0;
+        expected = -1;
+        assertEquals(expected, solution.search(A, target));
+
+        A = new int[] { 4, 5, 6, 7, 0, 1, 2 };
+        target = 8;
+        expected = -1;
+        assertEquals(expected, solution.search(A, target));
+
+        A = new int[] { 4, 5, 6, 7, 0, 1, 2 };
+        target = 6;
+        expected = 2;
+        assertEquals(expected, solution.search(A, target));
+    }
 }

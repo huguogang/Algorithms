@@ -73,4 +73,115 @@ public class Solution {
         // * if neighbors ratings are the same, their candy count are the same
         throw new NotImplementedException();
     }
+
+    /**
+     * Excel Sheet Column Title
+     * 
+     * Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+     * 
+     * For example:
+     * 
+     * 1 -> A
+     * 2 -> B
+     * 3 -> C
+     * ...
+     * 26 -> Z
+     * 27 -> AA
+     * 28 -> AB
+     * 
+     * @param n
+     * @return
+     */
+    public String convertToTitle(int n) {
+        String result = "";
+        while (n > 0) {
+            char c = (char) ((n - 1) % 26 + 'A');
+            result = c + result;
+            n = (int) Math.floor((n - 1) / 26);
+        }
+        return result;
+    }
+
+    /**
+     * Compare Version Numbers
+     * 
+     * Compare two version numbers version1 and version1.
+     * If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+     * 
+     * You may assume that the version strings are non-empty and contain only digits and the . character.
+     * The . character does not represent a decimal point and is used to separate number sequences.
+     * For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision
+     * of the second first-level revision.
+     * 
+     * Here is an example of version numbers ordering:
+     * 
+     * 0.1 < 1.1 < 1.2 < 13.37
+     * 
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public int compareVersion(String version1, String version2) {
+        // notice split take a regex, need to escape "."
+        String[] v1 = version1.split("\\.");
+        String[] v2 = version2.split("\\.");
+        int len = Math.min(v1.length, v2.length);
+        for (int i = 0; i < len; ++i) {
+            int ver1 = strToInt(v1[i]);
+            int ver2 = strToInt(v2[i]);
+            if (ver1 > ver2) {
+                return 1;
+            }
+            else if (ver1 < ver2) {
+                return -1;
+            }
+        }
+        // equal so far
+        if (v1.length == v2.length) {
+            return 0;
+        }
+        else {
+            for (int i = len; i < v1.length; ++i) {
+                int ver1 = strToInt(v1[i]);
+
+                if (ver1 > 0) {
+                    return 1;
+                }
+            }
+            for (int i = len; i < v2.length; ++i) {
+                int ver2 = strToInt(v2[i]);
+
+                if (ver2 > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        }
+    }
+
+    private int strToInt(String s) {
+        int ret = 0;
+        for (char c : s.toCharArray()) {
+            ret = ret * 10 + (c - '0');
+        }
+        return ret;
+    }
+
+    /**
+     * Maximum Gap
+     * 
+     * Given an unsorted array, find the maximum difference between the successive elements in its sorted form.
+     * 
+     * Try to solve it in linear time/space.
+     * 
+     * Return 0 if the array contains less than 2 elements.
+     * 
+     * You may assume all elements in the array are non-negative integers and fit in the 32-bit signed integer range.
+     * 
+     * @param num
+     * @return
+     */
+    public int maximumGap(int[] num) {
+        throw new NotImplementedException();
+    }
 }

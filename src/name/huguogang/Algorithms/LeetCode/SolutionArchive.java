@@ -3513,7 +3513,7 @@ public class SolutionArchive {
     }
 
     /**
-     * Search a 2D Matrix 
+     * Search a 2D Matrix
      * 
      * Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following
      * properties:
@@ -3579,6 +3579,7 @@ public class SolutionArchive {
             return binarySearchMatrix(matrix, start, mid - 1, target);
         }
     }
+
     /**
      * Edit Distance
      * 
@@ -3664,7 +3665,7 @@ public class SolutionArchive {
     }
 
     /**
-     * Restore IP Addresses 
+     * Restore IP Addresses
      * 
      * Given a string containing only digits, restore it by returning all possible valid IP address combinations.
      * 
@@ -3710,5 +3711,207 @@ public class SolutionArchive {
                 return;
             }
         }
+    }
+
+    /**
+     * Find Minimum in Rotated Sorted Array
+     * 
+     * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+     * 
+     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+     * 
+     * Find the minimum element.
+     * 
+     * You may assume no duplicate exists in the array.
+     * 
+     * @param num
+     * @return
+     */
+    public int findMin(int[] num) {
+        int left = 0, right = num.length - 1;
+        int mid;
+        int numLeft, numRight, numMid;
+        while (left < right) {
+            numLeft = num[left];
+            numRight = num[right];
+            if (numLeft < numRight) {
+                break; // no rotation
+            }
+            mid = (left + right) / 2;
+            numMid = num[mid];
+            if (numLeft > numMid) {
+                // rotation on the left side
+                left = left + 1;
+                right = mid;
+            }
+            else {
+                left = mid + 1;
+            }
+        }
+        return num[left];
+    }
+
+    public int findMin1(int[] num) {
+        return findMinHelper(num, 0, num.length - 1);
+    }
+
+    private int findMinHelper(int[] num, int left, int right) {
+        int numLeft = num[left];
+        int numRight = num[right];
+        if (numLeft < numRight || left == right) {
+            return numLeft;
+        }
+        if (right - left == 1) {
+            return Math.min(numLeft, numRight);
+        }
+        // has rotation in the section
+        int mid = (left + right) / 2;
+        int numMid = num[mid];
+        if (numMid < numRight) {
+            // rotation on the left side
+            return findMinHelper(num, left + 1, mid);
+        }
+        else {
+            return findMinHelper(num, mid + 1, right);
+        }
+    }
+
+    /**
+     * Remove Duplicates from Sorted Array II
+     * 
+     * Follow up for ”Remove Duplicates”: What if duplicates are allowed at most twice?
+     * For example, Given sorted array A = [1,1,1,2,2,3],
+     * Your function should return length = 5, and A is now [1,1,2,2,3]
+     * 
+     * @param A
+     * @return
+     */
+    public int removeDuplicatesII(int[] A) {
+        if (A == null) {
+            return 0;
+        }
+        if (A.length <= 2) {
+            return A.length;
+        }
+
+        int resultLen = 2;
+        for (int i = 2; i < A.length; ++i) {
+            if (A[i] == A[resultLen - 2]) {
+                continue;
+            }
+            if (resultLen < i) {
+                A[resultLen] = A[i];
+            }
+            ++resultLen;
+        }
+        return resultLen;
+    }
+
+    /**
+     * Search in Rotated Sorted Array
+     * 
+     * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+     * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+     * You are given a target value to search. If found in the array return its index, otherwise return -1.
+     * You may assume no duplicate exists in the array.
+     * 
+     * @param A
+     * @param target
+     * @return
+     */
+    public int search(int[] A, int target) {
+        return searchHelper(A, 0, A.length - 1, target);
+    }
+
+    private int searchHelper(int[] A, int left, int right, int target) {
+        if (left > right) {
+            return -1;
+        }
+        int mid = (left + right) / 2;
+        if (A[mid] == target) {
+            return mid;
+        }
+        if (A[left] <= A[mid]) {
+            // left side is not rotated
+            if (A[left] <= target && A[mid] > target) {
+                return searchHelper(A, left, mid - 1, target);
+            }
+            else {
+                // right side could be rotated and might have a chance
+                return searchHelper(A, mid + 1, right, target);
+            }
+        }
+        else {
+            // left side is rotated
+            // rigth side won't be roated
+            if (A[mid] < target && A[right] >= target) {
+                return searchHelper(A, mid + 1, right, target);
+            }
+            else {
+                return searchHelper(A, left, mid - 1, target);
+            }
+        }
+    }
+
+    /**
+     * Majority Element
+     * 
+     * Given an array of size n, find the majority element. The majority element is the element that appears more than
+     * n/2 times.
+     * 
+     * You may assume that the array is non-empty and the majority element always exist in the array.
+     * 
+     * @param num
+     * @return
+     */
+    public int majorityElement(int[] num) {
+        // Moore's voting algorithm http://www.cs.utexas.edu/~moore/best-ideas/mjrty/example.html
+        // Faster than majorityElementII
+        int count = 1;
+        int element = num[0];
+        for (int i = 1; i < num.length; ++i) {
+            int n = num[i];
+            if (n == element) {
+                ++count;
+            }
+            else {
+                if (count > 0) {
+                    --count;
+                }
+                else {
+                    element = n;
+                }
+            }
+        }
+        return element;
+    }
+
+    /**
+     * Majority Element
+     * 
+     * Given an array of size n, find the majority element. The majority element is the element that appears more than
+     * n/2 times.
+     * 
+     * You may assume that the array is non-empty and the majority element always exist in the array.
+     * 
+     * @param num
+     * @return
+     */
+    public int majorityElementII(int[] num) {
+        HashMap<Integer, Integer> lookup = new HashMap<Integer, Integer>();
+        int threshold = num.length / 2;
+        for (int i : num) {
+            if (!lookup.containsKey(i)) {
+                lookup.put(i, 0);
+            }
+            lookup.put(i, lookup.get(i) + 1);
+        }
+        for (int key : lookup.keySet()) {
+            if (lookup.get(key) > threshold) {
+                return key;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Input does not have majority element");
     }
 }
