@@ -1994,4 +1994,355 @@ public class SolutionArchiveTest {
         expected = 2;
         assertEquals(expected, solution.search(A, target));
     }
+
+    /**
+     * Excel Sheet Column Title
+     * 
+     * Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+     * 
+     * For example:
+     * 
+     * 1 -> A
+     * 2 -> B
+     * 3 -> C
+     * ...
+     * 26 -> Z
+     * 27 -> AA
+     * 28 -> AB
+     * 
+     * @param n
+     * @return
+     */
+    public String convertToTitle(int n) {
+        String result = "";
+        while (n > 0) {
+            char c = (char) ((n - 1) % 26 + 'A');
+            result = c + result;
+            n = (int) Math.floor((n - 1) / 26);
+        }
+        return result;
+    }
+
+    /**
+     * Compare Version Numbers
+     * 
+     * Compare two version numbers version1 and version1.
+     * If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+     * 
+     * You may assume that the version strings are non-empty and contain only digits and the . character.
+     * The . character does not represent a decimal point and is used to separate number sequences.
+     * For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision
+     * of the second first-level revision.
+     * 
+     * Here is an example of version numbers ordering:
+     * 
+     * 0.1 < 1.1 < 1.2 < 13.37
+     * 
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public int compareVersion(String version1, String version2) {
+        // notice split take a regex, need to escape "."
+        String[] v1 = version1.split("\\.");
+        String[] v2 = version2.split("\\.");
+        int len = Math.min(v1.length, v2.length);
+        for (int i = 0; i < len; ++i) {
+            int ver1 = strToInt(v1[i]);
+            int ver2 = strToInt(v2[i]);
+            if (ver1 > ver2) {
+                return 1;
+            }
+            else if (ver1 < ver2) {
+                return -1;
+            }
+        }
+        // equal so far
+        if (v1.length == v2.length) {
+            return 0;
+        }
+        else {
+            for (int i = len; i < v1.length; ++i) {
+                int ver1 = strToInt(v1[i]);
+
+                if (ver1 > 0) {
+                    return 1;
+                }
+            }
+            for (int i = len; i < v2.length; ++i) {
+                int ver2 = strToInt(v2[i]);
+
+                if (ver2 > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        }
+    }
+
+    private int strToInt(String s) {
+        int ret = 0;
+        for (char c : s.toCharArray()) {
+            ret = ret * 10 + (c - '0');
+        }
+        return ret;
+    }
+
+    @Test
+    public void testLengthOfLongestSubstring() {
+        String s;
+        int expected;
+
+        s = "bbb";
+        expected = 1;
+        assertEquals(expected, solution.lengthOfLongestSubstring(s));
+
+        s = "abcabcbb";
+        expected = 3;
+        assertEquals(expected, solution.lengthOfLongestSubstring(s));
+
+        s = "abcdefghijklmnopqrstuvwxyz";
+        expected = 26;
+        assertEquals(expected, solution.lengthOfLongestSubstring(s));
+
+        s = "abcabcbbcdefghijklmnopklmnopqrstuvwxyz";
+        expected = 16;
+        assertEquals(expected, solution.lengthOfLongestSubstring(s));
+
+        s = "wlrbbmqbhcdarzowkkyhiddqscdxrjmowfrxsjybldbefsarcbynecdyggxxpklorellnmpapqfwkhopkmco";
+        expected = 12;
+        assertEquals(expected, solution.lengthOfLongestSubstring(s));
+    }
+
+    @Test
+    public void testSolveSudoku() {
+        char[][] board;
+
+        board = new char[][] {
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' },
+                { '.', '.', '.', '.', '.', '.', '.', '.', '.' }
+        };
+        solution.solveSudoku(board);
+        printBoard(board);
+
+        board = new char[][] {
+                { '5', '3', '.', '.', '7', '.', '.', '.', '.' },
+                { '6', '.', '.', '1', '9', '5', '.', '.', '.' },
+                { '.', '9', '8', '.', '.', '.', '.', '6', '.' },
+
+                { '8', '.', '.', '.', '6', '.', '.', '.', '3' },
+                { '4', '.', '.', '8', '.', '3', '.', '.', '1' },
+                { '7', '.', '.', '.', '2', '.', '.', '.', '6' },
+
+                { '.', '6', '.', '.', '.', '.', '2', '8', '.' },
+                { '.', '.', '.', '4', '1', '9', '.', '.', '5' },
+                { '.', '.', '.', '.', '8', '.', '.', '7', '9' }
+        };
+        solution.solveSudoku(board);
+        printBoard(board);
+    }
+
+    private void printBoard(char[][] board) {
+        System.out.println("---------------------");
+        for (char[] row : board) {
+            System.out.println(row);
+        }
+        System.out.println("---------------------");
+    }
+
+    @Test
+    public void testSqrt() {
+        int x;
+        int expected;
+
+        x = 0;
+        expected = 0;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 1;
+        expected = 1;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 2;
+        expected = 1;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 3;
+        expected = 1;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 4;
+        expected = 2;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 5;
+        expected = 2;
+        assertEquals(expected, solution.sqrt(x));
+
+        x = 2147395599;
+        expected = 46339;
+        assertEquals(expected, solution.sqrt(x));
+    }
+
+    @Test
+    public void testWordBreak() {
+        Set<String> dict = new HashSet<String>();
+        String s;
+        boolean expected;
+
+        dict.add("leet");
+        dict.add("code");
+        s = "leetcode";
+        expected = true;
+        assertEquals(expected, solution.wordBreak(s, dict));
+
+        s = "leetcode1";
+        expected = false;
+        assertEquals(expected, solution.wordBreak(s, dict));
+
+        s = "leetcod";
+        expected = false;
+        assertEquals(expected, solution.wordBreak(s, dict));
+    }
+
+    @Test
+    public void testTitleToNumber() {
+        String s;
+        int expected;
+
+        s = "AB";
+        expected = 28;
+        assertEquals(expected, solution.titleToNumber(s));
+
+        s = "A";
+        expected = 1;
+        assertEquals(expected, solution.titleToNumber(s));
+
+        s = "Z";
+        expected = 26;
+        assertEquals(expected, solution.titleToNumber(s));
+
+    }
+
+    @Test
+    public void testTrailingZeroes() {
+        int n;
+        int expected;
+
+        n = 5;
+        expected = 1;
+        assertEquals(expected, solution.trailingZeroes(n));
+
+        n = 26;
+        expected = 6;
+        assertEquals(expected, solution.trailingZeroes(n));
+    }
+
+    @Test
+    public void testGrayCode() {
+        int n;
+        List<Integer> ret;
+
+        ret = solution.grayCode(2);
+        printList(ret);
+    }
+
+    @Test
+    public void testGenerateParenthesis() {
+        int n;
+        List<String> ret;
+
+        ret = solution.generateParenthesis(2);
+        printList(ret);
+
+        ret = solution.generateParenthesis(3);
+        printList(ret);
+    }
+
+    @Test
+    public void testPermute() {
+        int[] num;
+        List<List<Integer>> ret;
+
+        num = new int[] { 0, 1, 2, 3 };
+        ret = solution.permute(num);
+        printListList(ret);
+    }
+
+    @Test
+    public void testMinPathSum() {
+        int[][] grid;
+        int expected;
+
+        grid = new int[][] {
+                { 1, 2, 3, 8, 3, 0, 0 },
+                { 0, 1, 15, 10, 0, 0, 20 }
+        };
+        expected = 37;
+        assertEquals(expected, solution.minPathSum(grid));
+    }
+
+    @Test
+    public void testConvertToTitle() {
+        int n;
+        String expected;
+
+        n = 1;
+        expected = "A";
+        assertEquals(expected, solution.convertToTitle(n));
+
+        n = 26;
+        expected = "Z";
+        assertEquals(expected, solution.convertToTitle(n));
+
+        n = 27;
+        expected = "AA";
+        assertEquals(expected, solution.convertToTitle(n));
+
+        n = 53;
+        expected = "BA";
+        assertEquals(expected, solution.convertToTitle(n));
+
+        n = 52;
+        expected = "AZ";
+        assertEquals(expected, solution.convertToTitle(n));
+    }
+
+    @Test
+    public void testCompareVersion() {
+        String version1, version2;
+        int expected;
+
+        version1 = "0.1";
+        version2 = "0.5";
+        expected = -1;
+        assertEquals(expected, solution.compareVersion(version1, version2));
+
+        version1 = "0.1";
+        version2 = "13.57";
+        expected = -1;
+        assertEquals(expected, solution.compareVersion(version1, version2));
+
+        version1 = "0.1";
+        version2 = "0.1";
+        expected = 0;
+        assertEquals(expected, solution.compareVersion(version1, version2));
+
+        version1 = "010.001";
+        version2 = "10.1";
+        expected = 0;
+        assertEquals(expected, solution.compareVersion(version1, version2));
+
+        version1 = "010.000";
+        version2 = "10";
+        expected = 0;
+        assertEquals(expected, solution.compareVersion(version1, version2));
+    }
 }

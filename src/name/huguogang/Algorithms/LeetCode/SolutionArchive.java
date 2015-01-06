@@ -12,6 +12,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+
 /**
  * Archive of completed problems
  * 
@@ -3545,11 +3546,6 @@ public class SolutionArchive {
         return binarySearchMatrix(matrix, 0, size - 1, target);
     }
 
-    private class Coord {
-        public int row;
-        public int col;
-    }
-
     private int nRows;
     private int nCols;
 
@@ -3914,4 +3910,554 @@ public class SolutionArchive {
         throw new IllegalArgumentException(
                 "Input does not have majority element");
     }
+
+    /**
+     * Gray Code
+     * 
+     * The gray code is a binary numeral system where two successive values differ in only one bit.
+     * 
+     * Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray
+     * code. A gray code sequence must begin with 0.
+     * 
+     * For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
+     * 
+     * 00 - 0
+     * 01 - 1
+     * 11 - 3
+     * 10 - 2
+     * Note:
+     * For a given n, a gray code sequence is not uniquely defined.
+     * 
+     * For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
+     * 
+     * For now, the judge is able to judge based on one instance of gray code sequence. Sorry about that.
+     * 
+     * @param n
+     * @return
+     */
+    public List<Integer> grayCode(int n) {
+        int size = 1 << n;
+        List<Integer> ret = new ArrayList<Integer>(size);
+        for (int i = 0; i < size; ++i) {
+            ret.add(i ^ (i >> 1));
+        }
+        return ret;
+    }
+
+    /**
+     * Generate Parentheses
+     * 
+     * Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+     * 
+     * For example, given n = 3, a solution set is:
+     * 
+     * "((()))", "(()())", "(())()", "()(())", "()()()"
+     * 
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> ret = new ArrayList<String>();
+        char[] buffer = new char[n * 2];
+        generateParenthesisHelper(ret, buffer, 0, 0);
+        return ret;
+    }
+
+    private void generateParenthesisHelper(List<String> ret, char[] buffer,
+            int pos, int leftTotal) {
+        if (pos >= buffer.length) {
+            if (leftTotal == 0) {
+                // balanced pairs
+                ret.add(new String(buffer));
+            }
+            return;
+        }
+        if (leftTotal + pos > buffer.length) {
+            // prune
+            return;
+        }
+        buffer[pos] = '(';
+        generateParenthesisHelper(ret, buffer, pos + 1, leftTotal + 1);
+
+        if (leftTotal > 0) {
+            // we have an option for right parenthesis
+            buffer[pos] = ')';
+            generateParenthesisHelper(ret, buffer, pos + 1, leftTotal - 1);
+        }
+    }
+
+    /**
+     * Permutations
+     * 
+     * Given a collection of numbers, return all possible permutations.
+     * 
+     * For example,
+     * [1,2,3] have the following permutations:
+     * [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+     * 
+     * @param num
+     * @return
+     */
+    public List<List<Integer>> permute(int[] num) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        if (num == null || num.length == 0) {
+            return ret;
+        }
+        List<Integer> one = new ArrayList<Integer>();
+        one.add(num[0]);
+        ret.add(one);
+        permuteHelper(ret, num, 1);
+        return ret;
+    }
+
+    /**
+     * build permutation recursively. N - 1 -> N, by inserting the new element in all positions
+     * of the previous permutations
+     * 
+     * @param retVal
+     * @param num
+     * @param pos
+     */
+    @SuppressWarnings("unchecked")
+    private void permuteHelper(List<List<Integer>> retVal, int[] num, int pos) {
+        if (pos >= num.length) {
+            return;
+        }
+        // length of N - 1
+        int len = retVal.size();
+        for (int i = 0; i < pos; ++i) {
+            for (int j = 0; j < len; ++j) {
+                retVal.add((List<Integer>) ((ArrayList<Integer>) retVal.get(j))
+                        .clone());
+            }
+        }
+        for (int i = 0; i <= pos; ++i) { // insert position
+            for (int j = 0; j < len; ++j) { // iterate permutation of N - 1
+                retVal.get(i * len + j).add(i, num[pos]);
+            }
+        }
+        permuteHelper(retVal, num, pos + 1);
+    }
+
+    /**
+     * Minimum Path Sum
+     * 
+     * Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes
+     * the sum of all numbers along its path.
+     * 
+     * Note: You can only move either down or right at any point in time.
+     * 
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        int nRows = grid.length;
+        int nCols = grid[0].length;
+        int[] buffer = new int[nCols];
+        buffer[0] = grid[0][0];
+        for (int i = 1; i < nCols; ++i) {
+            buffer[i] = buffer[i - 1] + grid[0][i];
+        }
+
+        for (int i = 1; i < nRows; ++i) {
+            buffer[0] = buffer[0] + grid[i][0];
+            for (int j = 1; j < nCols; ++j) {
+                buffer[j] = Math.min(buffer[j] + grid[i][j], buffer[j - 1]
+                        + grid[i][j]);
+            }
+        }
+        return buffer[nCols - 1];
+    }
+
+    /**
+     * Sqrt(x)
+     * 
+     * Implement int sqrt(int x).
+     * 
+     * Compute and return the square root of x.
+     * 
+     * @param x
+     * @return
+     */
+    public int sqrt(int x) {
+        if (x < 0) {
+            throw new IllegalArgumentException(
+                    "Cannot compute square root of negative number");
+        }
+        return (int) searchSqrt(x, 0, x);
+    }
+
+    private long searchSqrt(long x, long min, long max) {
+        if (min == max) {
+            return min;
+        }
+        if (min == (max - 1)) {
+            // handle this one separately
+            long max2 = max * max;
+            if (max2 == x) {
+                return max;
+            }
+            return min; // leet code expect the floor of sqrt
+        }
+        /*
+         * pick the closest. but obviously leet code expect the smaller one
+         * if(min == (max - 1)) {
+         * long min2 = min * min;
+         * long max2 = max * max;
+         * return (x - min2 > max2 - x ? max : min);
+         * }
+         */
+        long mid = (min + max) / 2;
+        long mm = mid * mid;
+        if (mm == x) {
+            return mid;
+        }
+        else if (mm > x) {
+            // answer is on the left half
+            return searchSqrt(x, min, mid);
+        }
+        else {
+            // answer is on the right half
+            return searchSqrt(x, mid, max);
+        }
+    }
+
+    /**
+     * Word Break
+     * 
+     * Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence
+     * of one or more dictionary words.
+     * 
+     * For example, given
+     * s = "leetcode",
+     * dict = ["leet", "code"].
+     * 
+     * Return true because "leetcode" can be segmented as "leet code".
+     * 
+     * @param s
+     * @param dict
+     * @return
+     */
+    public boolean wordBreak(String s, Set<String> dict) {
+        // flag set to true if s.substring(0, idx - 1) is wordbreak
+        boolean isWordBreak[] = new boolean[s.length() + 1];
+        isWordBreak[0] = true; // empty string considered true
+        for (int i = 0; i < s.length(); i++) { // loop string
+            for (int j = 0; j <= i; ++j) { // increment from all previous wordbreak
+                if (isWordBreak[j] && dict.contains(s.substring(j, i + 1))) {
+                    isWordBreak[i + 1] = true;
+                    break;
+                }
+            }
+        }
+        return isWordBreak[s.length()];
+    }
+
+    /**
+     * Excel Sheet Column Number
+     * 
+     * Related to question Excel Sheet Column Title
+     * 
+     * Given a column title as appear in an Excel sheet, return its corresponding column number.
+     * 
+     * For example:
+     * 
+     * A -> 1
+     * B -> 2
+     * C -> 3
+     * ...
+     * Z -> 26
+     * AA -> 27
+     * AB -> 28
+     * Credits:
+     * Special thanks to @ts for adding this problem and creating all test cases.
+     * 
+     * @param s
+     * @return
+     */
+    public int titleToNumber(String s) {
+        int ret = 0;
+        for (char c : s.toCharArray()) {
+            int n = c - 'A' + 1;
+            ret = ret * 26 + n;
+        }
+        return ret;
+    }
+
+    /**
+     * Factorial Trailing Zeroes
+     * 
+     * Given an integer n, return the number of trailing zeroes in n!.
+     * 
+     * Note: Your solution should be in logarithmic time complexity.
+     * 
+     * @param n
+     * @return
+     */
+    public int trailingZeroes(int n) {
+        // just need to count factors of 5
+        int ret = 0;
+        while (n >= 5) {
+            ret += n / 5;
+            n = n / 5;
+        }
+        return ret;
+    }
+
+    /**
+     * Longest Substring Without Repeating Characters
+     * 
+     * Given a string, find the length of the longest substring without repeating characters. For example, the longest
+     * substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest
+     * substring is "b", with the length of 1.
+     * 
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+
+        HashMap<Character, Integer> lookup = new HashMap<Character, Integer>();
+        int left = 0;
+        int maxLen = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (lookup.get(c) != null) {
+                int len = i - left;
+                if (len > maxLen) {
+                    maxLen = len;
+                }
+                left = Math.max(lookup.get(c) + 1, left);
+            }
+            lookup.put(c, i);
+        }
+        maxLen = Math.max(maxLen, s.length() - left);
+        return maxLen;
+    }
+
+    /**
+     * Sudoku Solver
+     * 
+     * Write a program to solve a Sudoku puzzle by filling the empty cells.
+     * 
+     * Empty cells are indicated by the character '.'.
+     * 
+     * You may assume that there will be only one unique solution.
+     * 
+     * @param board
+     */
+    public void solveSudoku(char[][] board) {
+        ArrayList<Coord> unknowns = new ArrayList<Coord>();
+        for (int row = 0; row < 9; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                if (board[row][col] == '.') {
+                    unknowns.add(new Coord(row, col));
+                }
+            }
+        }
+        // assuming there is always one unique solution. no error checking here
+        solver(board, unknowns, 0);
+    }
+
+    private class Coord {
+        public int row;
+        public int col;
+        public Coord() {
+            
+        }
+        public Coord(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+    }
+
+    private boolean solver(char[][] board, ArrayList<Coord> unknowns, int pos) {
+        if (pos >= unknowns.size()) {
+            return true;
+        }
+        Coord coord = unknowns.get(pos);
+        // TODO: should prune this loop based on known, should cut at least 50% runtime
+        for (char c = '1'; c <= '9'; ++c) {
+            board[coord.row][coord.col] = c;
+            if (validateCoord(board, coord)) {
+                if (solver(board, unknowns, pos + 1)) {
+                    return true;
+                }
+            }
+        }
+        board[coord.row][coord.col] = '.';
+        return false;
+    }
+
+    /**
+     * validate sudoku rules for a single coordinate, check if row, col and block of that coordinate
+     * has any duplicates
+     * 
+     * @param board
+     * @param coord
+     */
+    private boolean validateCoord(char[][] board, Coord coord) {
+        return validateSudokuCol(board, coord.col) &&
+                validateSudokuRow(board, coord.row) &&
+                validateSudokuBlock(board, coord);
+    }
+
+    private char ZERO = '0';
+
+    private boolean validateSudokuRow(char[][] board, int row) {
+        int flag = 0;
+        for (char c : board[row]) {
+            if (c == '.') {
+                continue;
+            }
+            int myFlag = 1 << (c - ZERO);
+
+            if ((flag & myFlag) > 0) {
+                return false;
+            }
+            flag |= myFlag;
+        }
+        return true;
+    }
+
+    private boolean validateSudokuCol(char[][] board, int col) {
+        int flag = 0;
+        for (int row = 0; row < 9; ++row) {
+            char c = board[row][col];
+            if (c == '.') {
+                continue;
+            }
+            int myFlag = 1 << (c - ZERO);
+
+            if ((flag & myFlag) > 0) {
+                return false;
+            }
+            flag |= myFlag;
+        }
+        return true;
+    }
+
+    /**
+     * get 3X3 block, top left is block 0, block number goes row by row
+     * 
+     * @param board
+     * @param rowNumber
+     * @return
+     */
+    private boolean validateSudokuBlock(char[][] board, Coord coord) {
+        int flag = 0;
+        int topRow = (coord.row / 3) * 3;
+        int leftCol = (coord.col / 3) * 3;
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 3; ++col) {
+                char c = board[topRow + row][leftCol + col];
+                if (c == '.') {
+                    continue;
+                }
+                int myFlag = 1 << (c - ZERO);
+
+                if ((flag & myFlag) > 0) {
+                    return false;
+                }
+                flag |= myFlag;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Excel Sheet Column Title
+     * 
+     * Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+     * 
+     * For example:
+     * 
+     * 1 -> A
+     * 2 -> B
+     * 3 -> C
+     * ...
+     * 26 -> Z
+     * 27 -> AA
+     * 28 -> AB
+     * 
+     * @param n
+     * @return
+     */
+    public String convertToTitle(int n) {
+        String result = "";
+        while (n > 0) {
+            char c = (char) ((n - 1) % 26 + 'A');
+            result = c + result;
+            n = (int) Math.floor((n - 1) / 26);
+        }
+        return result;
+    }
+
+    /**
+     * Compare Version Numbers
+     * 
+     * Compare two version numbers version1 and version1.
+     * If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+     * 
+     * You may assume that the version strings are non-empty and contain only digits and the . character.
+     * The . character does not represent a decimal point and is used to separate number sequences.
+     * For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision
+     * of the second first-level revision.
+     * 
+     * Here is an example of version numbers ordering:
+     * 
+     * 0.1 < 1.1 < 1.2 < 13.37
+     * 
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public int compareVersion(String version1, String version2) {
+        // notice split take a regex, need to escape "."
+        String[] v1 = version1.split("\\.");
+        String[] v2 = version2.split("\\.");
+        int len = Math.min(v1.length, v2.length);
+        for (int i = 0; i < len; ++i) {
+            int ver1 = strToInt(v1[i]);
+            int ver2 = strToInt(v2[i]);
+            if (ver1 > ver2) {
+                return 1;
+            }
+            else if (ver1 < ver2) {
+                return -1;
+            }
+        }
+        // equal so far
+        if (v1.length == v2.length) {
+            return 0;
+        }
+        else {
+            for (int i = len; i < v1.length; ++i) {
+                int ver1 = strToInt(v1[i]);
+
+                if (ver1 > 0) {
+                    return 1;
+                }
+            }
+            for (int i = len; i < v2.length; ++i) {
+                int ver2 = strToInt(v2[i]);
+
+                if (ver2 > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        }
+    }
+
+    private int strToInt(String s) {
+        int ret = 0;
+        for (char c : s.toCharArray()) {
+            ret = ret * 10 + (c - '0');
+        }
+        return ret;
+    }
+
 }
