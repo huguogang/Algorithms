@@ -44,7 +44,6 @@ public class SolutionTest {
         assertEquals(expected, ret);
     }
 
-
     @Test
     public void testMaximumGap() {
         int[] num;
@@ -59,5 +58,6 @@ public class SolutionTest {
         assertEquals(expected, solution.maximumGap(num));
     }
 
-  
+
+
 }

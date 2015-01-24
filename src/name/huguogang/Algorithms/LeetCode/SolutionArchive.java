@@ -10,8 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.Stack;
-
+import java.util.TreeSet;
 
 /**
  * Archive of completed problems
@@ -4264,9 +4265,11 @@ public class SolutionArchive {
     private class Coord {
         public int row;
         public int col;
+
         public Coord() {
-            
+
         }
+
         public Coord(int row, int col) {
             this.row = row;
             this.col = col;
@@ -4460,4 +4463,604 @@ public class SolutionArchive {
         return ret;
     }
 
+    /**
+     * Combinations
+     * 
+     * Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+     * 
+     * For example,
+     * If n = 4 and k = 2, a solution is:
+     * 
+     * [
+     * [2,4],
+     * [3,4],
+     * [2,3],
+     * [1,2],
+     * [1,3],
+     * [1,4],
+     * ]
+     * 
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        ArrayList<Integer> combo = new ArrayList<Integer>();
+        combineHelper(result, combo, n, k, 1);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void combineHelper(List<List<Integer>> result,
+            ArrayList<Integer> combo, int n, int k, int current) {
+        if (combo.size() == k) {
+            result.add((ArrayList<Integer>) combo.clone());
+            return;
+        }
+        if (n - current + 1 < k - combo.size()) {
+            return; // prune
+        }
+        combo.add(current);
+        combineHelper(result, combo, n, k, current + 1);
+        combo.remove(combo.size() - 1);
+        combineHelper(result, combo, n, k, current + 1);
+    }
+
+    /**
+     * Unique Paths II
+     * 
+     * Follow up for "Unique Paths":
+     * 
+     * Now consider if some obstacles are added to the grids. How many unique paths would there be?
+     * 
+     * An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+     * 
+     * For example,
+     * There is one obstacle in the middle of a 3x3 grid as illustrated below.
+     * 
+     * [
+     * [0,0,0],
+     * [0,1,0],
+     * [0,0,0]
+     * ]
+     * The total number of unique paths is 2.
+     * 
+     * Note: m and n will be at most 100.
+     * 
+     * @param obstacleGrid
+     * @return
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int nRows = obstacleGrid.length;
+        int nCols = obstacleGrid[0].length;
+        int[] buffer = new int[nCols];
+        buffer[0] = 1;
+        for (int i = 0; i < nRows; ++i) {
+            for (int j = 0; j < nCols; ++j) {
+                if (obstacleGrid[i][j] == 1) {
+                    buffer[j] = 0;
+                }
+                else {
+                    if (j > 0) {
+                        buffer[j] = buffer[j - 1] + buffer[j];
+                    }
+                }
+            }
+        }
+        return buffer[nCols - 1];
+    }
+
+    /**
+     * Search in Rotated Sorted Array II
+     * 
+     * Follow up for "Search in Rotated Sorted Array":
+     * What if duplicates are allowed?
+     * 
+     * Would this affect the run-time complexity? How and why?
+     * 
+     * Write a function to determine if a given target is in the array.
+     * 
+     * @param A
+     * @param target
+     * @return
+     */
+    public boolean searchII(int[] A, int target) {
+        return searchIIHelper(A, 0, A.length - 1, target);
+    }
+
+    private boolean searchIIHelper(int[] A, int left, int right, int target) {
+        if (left > right) {
+            return false;
+        }
+        int mid = (left + right) / 2;
+        if (A[mid] == target) {
+            return true;
+        }
+        else if (A[left] > A[mid]) {
+            // pivot on the left side
+            if (A[mid] < target && A[right] >= target) {
+                return searchIIHelper(A, mid + 1, right, target);
+            }
+            else {
+                return searchIIHelper(A, left, mid - 1, target);
+            }
+        }
+        else if (A[left] < A[mid]) {
+            // rotation pivot on right side, or does not exist
+            if (A[left] <= target && A[mid] > target) {
+                return searchIIHelper(A, left, mid - 1, target);
+            }
+            else {
+                return searchIIHelper(A, mid + 1, right, target);
+            }
+
+        }
+        else {
+            // left equal to middle
+            return searchIIHelper(A, left + 1, right, target);
+        }
+    }
+
+    /**
+     * Largest Number
+     * 
+     * Given a list of non negative integers, arrange them such that they form the largest number.
+     * 
+     * For example, given [3, 30, 34, 5, 9], the largest formed number is 9534330.
+     * 
+     * Note: The result may be very large, so you need to return a string instead of an integer.
+     * 
+     * Credits:
+     * Special thanks to @ts for adding this problem and creating all test cases.
+     * 
+     * @param num
+     * @return
+     */
+    public String largestNumber(int[] num) {
+        String[] s = new String[num.length];
+        for (int i = 0; i < num.length; ++i) {
+            s[i] = Integer.toString(num[i]);
+        }
+        Arrays.sort(s, new Comparator<String>() {
+            public int compare(String s1, String s2) {
+                String a1 = s1 + s2;
+                String a2 = s2 + s1;
+                return a2.compareTo(a1);
+            }
+        });
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < s.length; ++i) {
+            sb.append(s[i]);
+        }
+        String ret = sb.toString();
+        // remove leading zeroes
+        int pos = -1;
+        int i = 0;
+        while (i < ret.length()) {
+            if (ret.charAt(i) != '0') {
+                break;
+            }
+            pos = i;
+            ++i;
+        }
+        if (pos == ret.length() - 1) {
+            return "0";
+        }
+        if (pos > 0) {
+            return ret.substring(pos);
+        }
+        return ret;
+    }
+
+    /**
+     * Spiral Matrix II
+     * 
+     * Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+     * 
+     * For example,
+     * Given n = 3,
+     * 
+     * You should return the following matrix:
+     * [
+     * [ 1, 2, 3 ],
+     * [ 8, 9, 4 ],
+     * [ 7, 6, 5 ]
+     * ]
+     * 
+     * @param n
+     * @return
+     */
+    public int[][] generateMatrix(int n) {
+        int[][] ret = new int[n][n];
+        int start = 1;
+        for (int layer = 0; layer < (n + 1) / 2; ++layer) {
+            start = fillCircle(ret, n, layer, start);
+        }
+        return ret;
+    }
+
+    /**
+     * fill a circle, return the next number
+     * 
+     * @param matrix
+     * @param n
+     * @param layer Layer number, start from 0
+     * @param start
+     * @return
+     */
+    private int fillCircle(int[][] matrix, int n, int layer, int start) {
+        // boundaries of layer n
+        int left = layer;
+        int top = layer;
+        int bottom = n - 1 - layer;
+        int right = n - 1 - layer;
+        if (left == right) {
+            matrix[left][top] = start++;
+            return start;
+        }
+        // go left
+        for (int i = left; i < right; ++i) {
+            matrix[top][i] = start++;
+        }
+        // down
+        for (int i = top; i < bottom; ++i) {
+            matrix[i][right] = start++;
+        }
+        // left
+        for (int i = right; i > left; --i) {
+            matrix[bottom][i] = start++;
+        }
+        // up
+        for (int i = bottom; i > top; --i) {
+            matrix[i][left] = start++;
+        }
+        return start;
+    }
+
+    /**
+     * Set Matrix Zeroes
+     * 
+     * Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+     * 
+     * @param matrix
+     */
+    public void setZeroes(int[][] matrix) {
+        // use top row and left column for flag
+        boolean topRowHasZero = false;
+        boolean leftColHasZero = false;
+        int nRows = matrix.length;
+        int nCols = matrix[0].length;
+
+        for (int i = 0; i < nCols; ++i) {
+            if (matrix[0][i] == 0) {
+                topRowHasZero = true;
+                break;
+            }
+        }
+        for (int i = 0; i < nRows; ++i) {
+            if (matrix[i][0] == 0) {
+                leftColHasZero = true;
+                break;
+            }
+        }
+        for (int row = 0; row < nRows; ++row) {
+            for (int col = 0; col < nCols; ++col) {
+                if (matrix[row][col] == 0) {
+                    matrix[row][0] = 0;
+                    matrix[0][col] = 0;
+                }
+            }
+        }
+        for (int row = 1; row < nRows; ++row) {
+            for (int col = 1; col < nCols; ++col) {
+                if (matrix[row][0] == 0 || matrix[0][col] == 0) {
+                    matrix[row][col] = 0;
+                }
+            }
+        }
+        if (topRowHasZero) {
+            for (int col = 0; col < nCols; ++col) {
+                matrix[0][col] = 0;
+            }
+        }
+        if (leftColHasZero) {
+            for (int row = 0; row < nRows; ++row) {
+                matrix[row][0] = 0;
+            }
+        }
+    }
+
+    /**
+     * Combination Sum
+     * 
+     * Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the
+     * candidate numbers sums to T.
+     * 
+     * The same repeated number may be chosen from C unlimited number of times.
+     * 
+     * Note:
+     * All numbers (including target) will be positive integers.
+     * Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 <= a2 <= … <= ak).
+     * The solution set must not contain duplicate combinations.
+     * For example, given candidate set 2,3,6,7 and target 7,
+     * A solution set is:
+     * [7]
+     * [2, 2, 3]
+     * 
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // candidates to sorted set
+        SortedSet<Integer> c = new TreeSet<Integer>();
+        for (int i : candidates) {
+            c.add(i);
+        }
+
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        ArrayList<Integer> intermediate = new ArrayList<Integer>();
+        Integer[] i = c.toArray(new Integer[0]);
+        combinationSumHelper(ret, i, intermediate, target, 0);
+        return ret;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void combinationSumHelper(List<List<Integer>> result,
+            Integer[] candidates,
+            ArrayList<Integer> intermediate, int target, int startIdx) {
+        if (target == 0) {
+            ArrayList<Integer> solution = (ArrayList<Integer>) intermediate
+                    .clone();
+            result.add(solution);
+        }
+        for (int i = startIdx; i < candidates.length; ++i) {
+            int n = candidates[i];
+            if (n > target) {
+                return; // sorted, no need to search further
+            }
+            intermediate.add(n);
+            combinationSumHelper(result, candidates, intermediate, target - n,
+                    i);
+            intermediate.remove(intermediate.size() - 1);
+        }
+    }
+
+    /**
+     * Fraction to Recurring Decimal
+     * 
+     * Given two integers representing the numerator and denominator of a fraction, return the fraction in string
+     * format.
+     * 
+     * If the fractional part is repeating, enclose the repeating part in parentheses.
+     * 
+     * For example,
+     * 
+     * Given numerator = 1, denominator = 2, return "0.5".
+     * Given numerator = 2, denominator = 1, return "2".
+     * Given numerator = 2, denominator = 3, return "0.(6)".
+     * Credits:
+     * Special thanks to @Shangrila for adding this problem and creating all test cases.
+     * 
+     * @param numerator
+     * @param denominator
+     * @return
+     */
+    public String fractionToDecimal(int numerator, int denominator) {
+        if (denominator == 0) {
+            throw new IllegalArgumentException("Denominator cannot be zero.");
+        }
+        // normalize the calculation
+        int sign = (int) (Math.signum(numerator) * Math.signum(denominator));
+        long numeratorL = numerator;
+        long denominatorL = denominator;
+        numeratorL = Math.abs(numeratorL);
+        denominatorL = Math.abs(denominatorL);
+        long intPart = numeratorL / denominatorL;
+        numeratorL = numeratorL % denominatorL;
+        String fractionPart = "";
+        // remainder lookup. key: reminder, value: position
+        HashMap<Long, Integer> lookup = new HashMap<Long, Integer>();
+        int counter = 0;
+        int repeatPos = -1;
+        while (numeratorL > 0) {
+            numeratorL = numeratorL * 10;
+            if (lookup.containsKey(numeratorL)) {
+                repeatPos = lookup.get(numeratorL);
+                break;
+            }
+            fractionPart += Long.toString(numeratorL / denominatorL);
+
+            lookup.put(numeratorL, counter);
+            numeratorL = numeratorL % denominatorL;
+            counter++;
+        }
+        String result = "";
+        if (sign < 0) {
+            result = "-";
+        }
+        result += Long.toString(intPart);
+
+        if (fractionPart.length() > 0) {
+            result += ".";
+            if (repeatPos >= 0) {
+                result = result
+                        + fractionPart.substring(0, repeatPos)
+                        + "("
+                        +
+                        fractionPart
+                                .substring(repeatPos, fractionPart.length())
+                        + ")";
+            }
+            else {
+                result += fractionPart;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Word Break II
+     * 
+     * Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a
+     * valid dictionary word.
+     * 
+     * Return all such possible sentences.
+     * 
+     * For example, given
+     * s = "catsanddog",
+     * dict = ["cat", "cats", "and", "sand", "dog"].
+     * 
+     * A solution is ["cats and dog", "cat sand dog"].
+     * 
+     * @param s
+     * @param dict
+     * @return
+     */
+    public List<String> wordBreakII(String s, Set<String> dict) {
+        List<String> result = new ArrayList<String>();
+        // flag, if false, we know the right substring after i has no solution
+        // true just mean it is worthwhile to search down the road
+        boolean isWordBreak[] = new boolean[s.length()];
+        for (int i = 0; i < isWordBreak.length; ++i) {
+            isWordBreak[i] = true;
+        }
+        String sentence = "";
+        findAllSolutions(result, s, dict, 0, sentence, isWordBreak);
+        return result;
+    }
+
+    private boolean findAllSolutions(List<String> result, String s,
+            Set<String> dict, int pos, String sentence, boolean[] isWordBreak) {
+        if (pos == s.length()) {
+            // found a solution
+            result.add(sentence.substring(0, sentence.length() - 1));
+            return true;
+        }
+        if (!isWordBreak[pos]) {
+            return false; // the right sub string has no solution
+        }
+        boolean hasSolution = false;
+        for (int i = pos + 1; i <= s.length(); ++i) {
+            String tmp = s.substring(pos, i);
+            if (dict.contains(tmp)) {
+                isWordBreak[pos] = findAllSolutions(result, s, dict, i,
+                        sentence + tmp + " ", isWordBreak);
+                hasSolution |= isWordBreak[pos];
+            }
+        }
+        return hasSolution;
+    }
+
+    /**
+     * Word Ladder II
+     * 
+     * Given two words (start and end), and a dictionary, find all shortest transformation sequence(s) from start to
+     * end, such that:
+     * 
+     * Only one letter can be changed at a time
+     * Each intermediate word must exist in the dictionary
+     * For example,
+     * 
+     * Given:
+     * start = "hit"
+     * end = "cog"
+     * dict = ["hot","dot","dog","lot","log"]
+     * Return
+     * [
+     * ["hit","hot","dot","dog","cog"],
+     * ["hit","hot","lot","log","cog"]
+     * ]
+     * Note:
+     * All words have the same length.
+     * All words contain only lowercase alphabetic characters.
+     * 
+     * @param start
+     * @param end
+     * @param dict
+     * @return
+     */
+    public List<List<String>> findLadders(String start, String end,
+            Set<String> dict) {
+        List<List<String>> result = new ArrayList<List<String>>();
+        // -- 1. find shorted ladder length
+        // intermediate result, list of layers, each layer is a lookup of possbile word
+        // in this layer, and their parents in the previous layer
+        List<HashMap<String, List<String>>> layers = new ArrayList<HashMap<String, List<String>>>();
+        HashMap<String, List<String>> currentLevel = new HashMap<String, List<String>>();
+        currentLevel.put(start, new ArrayList<String>());
+        layers.add(currentLevel);
+        int depth = 0;
+        boolean foundLadder = false;
+        HashMap<String, Integer> visited = new HashMap<String, Integer>();
+        visited.put(start, depth);
+        while (!currentLevel.isEmpty() && !foundLadder) {
+            ++depth;
+            HashMap<String, List<String>> nextLevel = new HashMap<String, List<String>>();
+            for (String parentWord : currentLevel.keySet()) {
+                char[] arrChar = parentWord.toCharArray();
+                for (int i = 0; i < parentWord.length(); ++i) {
+                    char oldChar = arrChar[i];
+                    for (char c = 'a'; c <= 'z'; ++c) {
+                        if (c == oldChar) {
+                            continue;
+                        }
+                        arrChar[i] = c;
+                        String newStr = new String(arrChar);
+                        if (visited.containsKey(newStr)
+                                && visited.get(newStr) < depth) {
+                            // already visited in previous layer
+                            continue;
+                        }
+                        if (newStr.equals(end)) {
+                            foundLadder = true;
+                        }
+                        if (newStr.equals(end) || dict.contains(newStr)) {
+                            visited.put(newStr, depth);
+                            List<String> parents;
+                            if (nextLevel.containsKey(newStr)) {
+                                parents = nextLevel.get(newStr);
+                            }
+                            else {
+                                parents = new ArrayList<String>();
+                                nextLevel.put(newStr, parents);
+                            }
+                            parents.add(parentWord);
+                        }
+                    }
+                    arrChar[i] = oldChar;
+                }
+            }
+            layers.add(nextLevel);
+            currentLevel = nextLevel;
+        }
+        ;
+        if (foundLadder) {
+            ArrayList<String> path = new ArrayList<String>();
+            path.add(end);
+            findLaddersHelper(layers, path, depth, end, result);
+        }
+        return result;
+    }
+
+    private void findLaddersHelper(List<HashMap<String, List<String>>> layers,
+            ArrayList<String> path,
+            int depth, String word, List<List<String>> result) {
+        if (depth == 0) {
+            // reverse and add to result
+            ArrayList<String> ladder = new ArrayList<String>();
+            for (int i = path.size() - 1; i >= 0; --i) {
+                ladder.add(path.get(i));
+            }
+            result.add(ladder);
+            return;
+        }
+        List<String> parents = layers.get(depth).get(word);
+        for (String s : parents) {
+            path.add(s);
+            findLaddersHelper(layers, path, depth - 1, s, result);
+            path.remove(path.size() - 1);
+        }
+    }
 }

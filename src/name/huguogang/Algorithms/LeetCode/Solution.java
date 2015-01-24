@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.Stack;
+import java.util.TreeSet;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import test.name.huguogang.Algorithms.LeetCode.Util;
 
 /**
  * TODO: tree in/post/pre order using stack
@@ -92,8 +96,6 @@ public class Solution {
         throw new NotImplementedException();
     }
 
-
-
     /**
      * Word Break II
      * 
@@ -114,5 +116,76 @@ public class Solution {
      */
     public List<String> wordBreakII(String s, Set<String> dict) {
         throw new NotImplementedException();
+    }
+
+    /**
+     * Dungeon Game
+     * 
+     * The demons had captured the princess (P) and imprisoned her in the bottom-right corner of a dungeon. The dungeon
+     * consists of M x N rooms laid out in a 2D grid. Our valiant knight (K) was initially positioned in the top-left
+     * room and must fight his way through the dungeon to rescue the princess.
+     * 
+     * The knight has an initial health point represented by a positive integer. If at any point his health point drops
+     * to 0 or below, he dies immediately.
+     * 
+     * Some of the rooms are guarded by demons, so the knight loses health (negative integers) upon entering these
+     * rooms; other rooms are either empty (0's) or contain magic orbs that increase the knight's health (positive
+     * integers).
+     * 
+     * In order to reach the princess as quickly as possible, the knight decides to move only rightward or downward in
+     * each step.
+     * 
+     * 
+     * Write a function to determine the knight's minimum initial health so that he is able to rescue the princess.
+     * 
+     * For example, given the dungeon below, the initial health of the knight must be at least 7 if he follows the
+     * optimal path RIGHT-> RIGHT -> DOWN -> DOWN.
+     * 
+     * -2 (K) -3 3
+     * -5 -10 1
+     * 10 30 -5 (P)
+     * 
+     * Notes:
+     * 
+     * The knight's health has no upper bound.
+     * Any room can contain threats or power-ups, even the first room the knight enters and the bottom-right room where
+     * the princess is imprisoned.
+     * Credits:
+     * Special thanks to @stellari for adding this problem and creating all test cases.
+     * 
+     * @param dungeon
+     * @return
+     */
+    public int calculateMinimumHP(int[][] dungeon) {
+        int nRows = dungeon.length;
+        int nCols = dungeon[0].length;
+        List<List<RouteData>> buffer = new ArrayList<List<RouteData>>(nCols);
+        RouteData d = RouteData.createRouteData(dungeon[0][0]);
+        List<RouteData> list = new ArrayList<Solution.RouteData>();
+        list.add(d);
+        buffer.add(list);
+        // first row
+        throw new NotImplementedException();
+    }
+
+    public static class RouteData {
+        // accumulated health point so far
+        int healthPoint;
+        // the required initial health
+        int minInitialHealth;
+
+        public RouteData(int healthPoint, int minInitialHealth) {
+            this.healthPoint = healthPoint;
+            this.minInitialHealth = minInitialHealth;
+        }
+
+        public static RouteData createRouteData(int healthPoint) {
+            if (healthPoint <= 0) {
+                return new RouteData(healthPoint, 1 - healthPoint);
+            }
+            else {
+                return new RouteData(healthPoint, 0);
+            }
+        }
     }
 }
