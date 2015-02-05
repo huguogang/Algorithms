@@ -188,4 +188,349 @@ public class Solution {
             }
         }
     }
+
+    /**
+     * Jump Game II
+     * 
+     * Given an array of non-negative integers, you are initially positioned at the first index of the array.
+     * 
+     * Each element in the array represents your maximum jump length at that position.
+     * 
+     * Your goal is to reach the last index in the minimum number of jumps.
+     * 
+     * For example:
+     * Given array A = [2,3,1,1,4]
+     * 
+     * The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the
+     * last index.)
+     * 
+     * @param A
+     * @return
+     */
+    public int jump(int[] A) {
+        // init: step 1 always landed on A[0]
+        int step = 1;
+        // right most position that can be reached at the current step count
+        int currentRight = 1;
+        // right most position that the next step can reach
+        int nextRight = 1;
+        for (int i = 0; i < A.length - 1; ++i) {
+            if (i == currentRight) {
+                if (currentRight == nextRight) {
+                    return 0;
+                }
+                ++step;
+                currentRight = nextRight;
+            }
+            nextRight = Math.max(nextRight, A[i] + i + 1);
+
+            if (nextRight >= A.length) {
+                return step;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Jump Game II
+     * 
+     * Time limit exceeded version
+     * 
+     * @param A
+     * @return
+     */
+    public int jumpTLE(int[] A) {
+        int[] buffer = new int[A.length];
+        for (int i = 1; i < buffer.length; ++i) {
+            buffer[i] = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i < buffer.length - 1; ++i) {
+            int j;
+            for (j = i + 1; j <= i + A[i] && j < buffer.length; ++j) {
+                buffer[j] = Math.min(buffer[j], buffer[i] + 1);
+            }
+            if (j == buffer.length) {
+                break;
+            }
+
+        }
+        return buffer[buffer.length - 1];
+    }
+
+    /**
+     * Palindrome Partitioning
+     * 
+     * Given a string s, partition s such that every substring of the partition is a palindrome.
+     * 
+     * Return all possible palindrome partitioning of s.
+     * 
+     * For example, given s = "aab",
+     * Return
+     * 
+     * [
+     * ["aa","b"],
+     * ["a","a","b"]
+     * ]
+     * 
+     * @param s
+     * @return
+     */
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<List<String>>();
+        ArrayList<String> aSolution = new ArrayList<String>();
+        partitionDFS(s, aSolution, result, 0);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void partitionDFS(String s, ArrayList<String> aSolution,
+            List<List<String>> result, int startPos) {
+        if (startPos == s.length()) {
+            result.add((ArrayList<String>) aSolution.clone());
+            return;
+        }
+        for (int i = startPos; i < s.length(); i++) {
+            if (checkPalindrom(s, startPos, i)) {
+                aSolution.add(s.substring(startPos, i + 1));
+                partitionDFS(s, aSolution, result, i + 1);
+                aSolution.remove(aSolution.size() - 1);
+            }
+        }
+    }
+
+    private boolean checkPalindrom(String s, int left, int right) {
+        int head = left, tail = right;
+        while (head <= tail) {
+            if (s.charAt(head) != s.charAt(tail)) {
+                return false;
+            }
+            ++head;
+            --tail;
+        }
+        return true;
+    }
+
+    /**
+     * Binary Search Tree Iterator
+     * 
+     * Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a
+     * BST.
+     * 
+     * Calling next() will return the next smallest number in the BST.
+     * 
+     * Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the
+     * tree.
+     * 
+     * Credits:
+     * Special thanks to @ts for adding this problem and creating all test cases.
+     * 
+     * Your BSTIterator will be called like this:
+     * BSTIterator i = new BSTIterator(root);
+     * while (i.hasNext()) v[f()] = i.next();
+     * 
+     * @author ghu
+     *
+     */
+    public static class BSTIterator {
+        private TreeNode root;
+        private TreeNode current;
+        private Stack<TreeNode> path;
+
+        public BSTIterator(TreeNode root) {
+            this.root = root;
+            current = root;
+            path = new Stack<TreeNode>();
+        }
+
+        /** @return whether we have a next smallest number */
+        public boolean hasNext() {
+            return current != null || !path.isEmpty();
+        }
+
+        /** @return the next smallest number */
+        public int next() {
+            while (current != null) {
+                path.push(current);
+                current = current.left;
+            }
+            current = path.pop();
+            int val = current.val;
+            current = current.right;
+            return val;
+        }
+    }
+
+    /**
+     * Longest Palindromic Substring
+     * 
+     * Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is
+     * 1000, and there exists one unique longest palindromic substring.
+     * 
+     * @param s
+     * @return
+     */
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        int maxLen = 1;
+        // buffer, row: length of palindrome, col: true if palindrom starting at the col
+        boolean[][] isPalindrome = new boolean[s.length() + 1][s.length()];
+        // init 0 and single char length, they are all valid palindrome
+        for (int i = 0; i < s.length(); ++i) {
+            isPalindrome[0][i] = true;
+            isPalindrome[1][i] = true;
+        }
+        // check the existence of palindrome of the specified length
+        for (int len = 2; len < s.length() + 1; ++len) {
+            boolean hasPalindrome = false;
+            for (int i = 0; i < s.length() - len + 1; ++i) {
+                isPalindrome[len][i] = isPalindrome[len - 2][i + 1]
+                        && (s.charAt(i) == s.charAt(i + len - 1));
+                hasPalindrome = hasPalindrome || isPalindrome[len][i];
+            }
+            if (hasPalindrome) {
+                maxLen = len;
+            }
+            // TODO: we can prune if two consecutive "len"s has no palindrome
+        }
+        for (int i = 0; i < s.length(); ++i) {
+            if (isPalindrome[maxLen][i]) {
+                return s.substring(i, i + maxLen);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Gas Station
+     * 
+     * There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+     * 
+     * You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next
+     * station (i+1). You begin the journey with an empty tank at one of the gas stations.
+     * 
+     * Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+     * 
+     * Note:
+     * The solution is guaranteed to be unique.
+     * 
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * Path Sum II
+     * 
+     * Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+     * 
+     * For example:
+     * Given the below binary tree and sum = 22,
+     * 5
+     * / \
+     * 4 8
+     * / / \
+     * 11 13 4
+     * / \ / \
+     * 7 2 5 1
+     * return
+     * [
+     * [5,4,11,2],
+     * [5,8,4,5]
+     * ]
+     * 
+     * @param root
+     * @param sum
+     * @return
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        pathSumDFS(root, sum, result, path);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void pathSumDFS(TreeNode node, int sum, List<List<Integer>> result,
+            ArrayList<Integer> path) {
+        if (node == null) {
+            return;
+        }
+        path.add(node.val);
+
+        int diff = sum - node.val;
+        if (node.left == null && node.right == null) {
+            if (diff == 0) {
+                result.add((ArrayList<Integer>) path.clone());
+            }
+        }
+        else {
+            pathSumDFS(node.left, diff, result, path);
+            pathSumDFS(node.right, diff, result, path);
+        }
+        path.remove(path.size() - 1);
+    }
+
+    /**
+     * Median of Two Sorted Arrays
+     * 
+     * There are two sorted arrays A and B of size m and n respectively. Find the median of the two sorted arrays. The
+     * overall run time complexity should be O(log (m+n)).
+     * 
+     * @param A
+     * @param B
+     * @return
+     */
+    public double findMedianSortedArrays(int A[], int B[]) {
+        int len = A.length + B.length;
+        if(len % 2 == 1) {
+            return findKth(A, 0, A.length, B, 0, B.length, len/2 + 1);
+        }
+        else {
+            return (findKth(A, 0, A.length, B, 0, B.length, len/2) + 
+                    findKth(A, 0, A.length, B, 0, B.length, len/2 + 1))/2.0;
+        }
+    }
+    /**
+     * Helper, find the Kth number of two sorted arrays. K = 1 will find max
+     * 
+     * @param A
+     * @param B
+     * @param k
+     * @return
+     */
+    private int findKth(int A[], int aStart, int aLen, int B[], int bStart, int bLen, int k) {
+        if(aLen < bLen) {
+            return findKth(B, bStart, bLen, A, aStart, aLen, k);
+        }
+        //aLen >= bLen
+        if(bLen == 0) {
+            return A[k - 1 + aStart];
+        }
+        if(k == 1) {
+            return Math.min(A[aStart], B[bStart]);
+        }
+        //# of elements to skip in each array, our target is to skip k - 2 elements
+        int bSkip = Math.min(k/2 - 1, bLen - 1);
+        int aSkip = k - 2 - bSkip;
+        int aIdx = aStart + aSkip;
+        int bIdx = bStart + bSkip;
+        if(A[aIdx] < B[bIdx]) {
+            //we can safely remove left of A (also exclude aIdx), and right of B from next search
+            return findKth(A, aIdx + 1, aLen - aSkip - 1, B, bStart, bSkip + 1, k - aSkip - 1);
+        }
+        else if(A[aIdx] > B[bIdx]){
+            //we can safely remove left of B (also exclude bIdx), and right of A from next search
+            return findKth(A, aStart, aSkip + 1, B, bIdx + 1, bLen - bSkip - 1, k - bSkip - 1);
+        }
+        else {
+            //A[aIdx] == b[bId], we got element k - 1 and element k are the same, just pick either one
+            return A[aIdx];
+        }
+    }
 }

@@ -2663,4 +2663,74 @@ public class SolutionArchiveTest {
         result = solution.findLadders(start, end, dict);
         printListList(result);
     }
+
+    public void testFirstMissingPositive() {
+        int[] A;
+        int expected;
+
+        A = new int[] { 1, 2, 0 };
+        expected = 3;
+        assertEquals(expected, solution.firstMissingPositive(A));
+
+        A = new int[] { 3, 4, -1, 1 };
+        expected = 2;
+        assertEquals(expected, solution.firstMissingPositive(A));
+
+        A = new int[] { 3, 4, 1, 2 };
+        expected = 5;
+        assertEquals(expected, solution.firstMissingPositive(A));
+
+        A = new int[] { 1, 1 };
+        expected = 2;
+        assertEquals(expected, solution.firstMissingPositive(A));
+    }
+
+    @Test
+    public void testInsertionSortList() {
+        ListNode head;
+        ListNode ret;
+
+        head = new ListNode(10);
+        head.next = new ListNode(10);
+        head.next.next = new ListNode(8);
+        ret = solution.insertionSortList(head);
+        printLinkedList(ret);
+    }
+
+    @Test
+    public void testDeleteDuplicatesII() {
+        ListNode head;
+        ListNode ret;
+
+        System.out.println("List 1");
+        head = new ListNode(1);
+        head.next = new ListNode(1);
+        head.next.next = new ListNode(2);
+        head.next.next.next = new ListNode(2);
+        ret = solution.deleteDuplicatesII(head);
+        printLinkedList(ret);
+
+        System.out.println("List 2");
+        head = new ListNode(1);
+        head.next = new ListNode(1);
+        head.next.next = new ListNode(2);
+        head.next.next.next = new ListNode(3);
+        head.next.next.next.next = new ListNode(3);
+        ret = solution.deleteDuplicatesII(head);
+        printLinkedList(ret);
+    }
+
+    @Test
+    public void testCombinationSum2() {
+        int[] num;
+        int target;
+        List<List<Integer>> result;
+
+        num = new int[] { 10, 1, 2, 7, 6, 1, 5 };
+        target = 8;
+        result = solution.combinationSum2(num, target);
+        printListList(result);
+    }
+    
+
 }

@@ -5063,4 +5063,155 @@ public class SolutionArchive {
             path.remove(path.size() - 1);
         }
     }
+
+    /**
+     * First Missing Positive
+     * 
+     * Given an unsorted integer array, find the first missing positive integer.
+     * 
+     * For example,
+     * Given [1,2,0] return 3,
+     * and [3,4,-1,1] return 2.
+     * 
+     * Your algorithm should run in O(n) time and uses constant space.
+     * 
+     * @param A
+     * @return
+     */
+    public int firstMissingPositive(int[] A) {
+        int len = A.length;
+        for (int i = 0; i < len; ++i) {
+            while (A[i] <= len && A[i] >= 1  // A[i] could be part of the consecurity positive number
+                    && A[i] != i + 1        // A[i] is not in it's right place
+                    && A[A[i] - 1] != A[i] // the right place has a different number
+            ) {
+                // swap A[i] with A[A[i]]
+                int tmp = A[i];
+                A[i] = A[tmp - 1];
+                A[tmp - 1] = tmp;
+            }
+        }
+        for (int i = 0; i < len; ++i) {
+            if (A[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        return A.length + 1;
+    }
+
+    /**
+     * Insertion Sort List
+     * 
+     * Sort a linked list using insertion sort.
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode insertionSortList(ListNode head) {
+        ListNode newHead = new ListNode(Integer.MIN_VALUE);
+        ListNode iterator = head;
+        while (iterator != null) {
+            ListNode insertPos = newHead;
+            while (insertPos.next != null && insertPos.next.val < iterator.val) {
+                insertPos = insertPos.next;
+            }
+            ListNode tmp = insertPos.next;
+            insertPos.next = iterator;
+            iterator = iterator.next;
+            insertPos.next.next = tmp;
+        }
+        return newHead.next;
+    }
+
+    /**
+     * Remove Duplicates from Sorted List II
+     * 
+     * Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the
+     * original list.
+     * 
+     * For example,
+     * Given 1->2->3->3->4->4->5, return 1->2->5.
+     * Given 1->1->1->2->3, return 2->3.
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicatesII(ListNode head) {
+        ListNode newHead = new ListNode(0);
+        ListNode newTail = newHead;
+        ListNode left = head;
+        while (left != null) {
+            if (left.next == null || left.next.val != left.val) {
+                newTail.next = left;
+                newTail = left;
+                left = left.next;
+            }
+            else {
+                // skip all the duplicated values
+                ListNode right = left.next;
+                while (right != null && right.val == left.val) {
+                    right = right.next;
+                }
+                left = right;
+            }
+        }
+        newTail.next = null;
+        return newHead.next;
+    }
+
+    /**
+     * Combination Sum II
+     * 
+     * Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the
+     * candidate numbers sums to T.
+     * 
+     * Each number in C may only be used once in the combination.
+     * 
+     * Note:
+     * All numbers (including target) will be positive integers.
+     * Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 <= a2 <= … <= ak).
+     * The solution set must not contain duplicate combinations.
+     * For example, given candidate set 10,1,2,7,6,1,5 and target 8,
+     * A solution set is:
+     * [1, 7]
+     * [1, 2, 5]
+     * [2, 6]
+     * [1, 1, 6]
+     * 
+     * @param num
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum2(int[] num, int target) {
+        Arrays.sort(num);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        combinationSum2DFS(num, target, path, result, 0);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void combinationSum2DFS(int[] num, int target,
+            ArrayList<Integer> path,
+            List<List<Integer>> result, int startIdx) {
+        if (target == 0) {
+            result.add((ArrayList<Integer>) path.clone());
+            return;
+        }
+        if (target < 0 || startIdx >= num.length) {
+            return;
+        }
+        int previous = -1;
+        for (int i = startIdx; i < num.length; ++i) {
+            if (num[i] == previous) {
+                // repeating number only check once at this depth
+                // otherwise, we will see duplicated result sets
+                continue;
+            }
+            path.add(num[i]);
+            combinationSum2DFS(num, target - num[i], path, result, i + 1);
+            path.remove(path.size() - 1);
+            previous = num[i];
+        }
+    }
 }
