@@ -171,4 +171,45 @@ public class SolutionTest {
         expected = 3.5;
         assertEquals(expected, solution.findMedianSortedArrays(A, B), epsilon);
     }
+    @Test
+    public void testIsUgly() {
+    	int num;
+    	boolean expected;
+    	
+    	num = 1;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 2;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 3;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 5;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 6;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 8;
+    	expected = true;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 14;
+    	expected = false;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = -1;
+    	expected = false;
+    	assertEquals(expected, solution.isUgly(num));
+    	
+    	num = 0;
+    	expected = false;
+    	assertEquals(expected, solution.isUgly(num));
+    }
 }
