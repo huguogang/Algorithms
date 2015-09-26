@@ -933,6 +933,33 @@ public class SolutionArchiveTest {
         expected = 1954;
         assertEquals(expected, solution.romanToInt(s));
 
+        s = "VII";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "LXV";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "CCLI";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+     
+        s = "XXIV";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "XCIX";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "DCCC";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "LXXXIII";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "MCCLVII";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
+        s = "MMDXXXIV";
+        System.out.printf("%s = %d\n", s, solution.romanToInt(s));
+        
     }
 
     @Test
@@ -1576,7 +1603,48 @@ public class SolutionArchiveTest {
         expected = "MCMLIV";
         num = 1954;
         assertEquals(expected, solution.intToRoman(num));
+        
+        num = 8;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        	
+        num = 16;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 75;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
 
+        num = 134;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 528;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 947;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 692;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 1_368;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 2_251;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 11;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 2004;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 16;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 803;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
+        
+        num = 258;
+        System.out.printf("%d = %s\n", num, solution.intToRoman(num));
     }
 
     @Test
