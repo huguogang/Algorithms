@@ -2,22 +2,15 @@ package name.huguogang.Algorithms.LeetCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import test.name.huguogang.Algorithms.LeetCode.Util;
 
 /**
  * TODO: tree in/post/pre order using stack TODO: tree in/post/pre order using
@@ -905,5 +898,20 @@ public class Solution {
 	// dummy implementation to allow compile
 	private boolean isBadVersion(int n) {
 		return (n == 1);
+	}
+
+	/**
+	 * Majority Element II
+	 * 
+	 * Given an integer array of size n, find all elements that appear more than
+	 * ⌊ n/3 ⌋ times. The algorithm should run in linear time and in O(1) space.
+	 * 
+	 * @param nums
+	 * @return
+	 */
+	public List<Integer> majorityElement(int[] nums) {
+		// Moore's voting algorithm
+		// http://www.cs.utexas.edu/~moore/best-ideas/mjrty/example.html
+		return Arrays.asList(3, 1);
 	}
 }

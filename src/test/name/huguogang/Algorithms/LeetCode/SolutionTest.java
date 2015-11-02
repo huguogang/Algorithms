@@ -1,24 +1,23 @@
 package test.name.huguogang.Algorithms.LeetCode;
 
-import static org.junit.Assert.*;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printArray;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printLinkedList;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static test.name.huguogang.Algorithms.LeetCode.Util.printListList;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printTreeByLevel;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printListArray;
-import static test.name.huguogang.Algorithms.LeetCode.Util.printMatrix;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 
-import name.huguogang.Algorithms.LeetCode.*;
-import name.huguogang.Algorithms.LeetCode.*;
+import name.huguogang.Algorithms.LeetCode.Solution;
 import name.huguogang.Algorithms.LeetCode.Solution.BSTIterator;
+import name.huguogang.Algorithms.LeetCode.TreeNode;
 
 @SuppressWarnings("unused")
 public class SolutionTest {
@@ -309,10 +308,22 @@ public class SolutionTest {
 		expected = 23;
 		actual = solution.calculate(s);
 		assertEquals(expected, actual);
-		
+
 		s = "(7) - (0) + (4)";
 		expected = 11;
 		actual = solution.calculate(s);
 		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test for Majority Element II
+	 */
+	@Test
+	public void testMajorityElementII() {
+		int[] input;
+		ArrayList<Integer> expected;
+		
+		input = new int[] {1, 1, 3, 3};
+		assertEquals(solution.majorityElement(input), Arrays.asList(1, 3));
 	}
 }
