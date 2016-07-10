@@ -18,7 +18,7 @@ public class TwitterTest {
 		
 		obj.postTweet(1, 100);
 		feed = obj.getNewsFeed(1);
-		assertTrue(feed.isEmpty());
+		assertEquals(1, feed.size());
 		
 		obj.follow(0, 1);
 		feed = obj.getNewsFeed(0);
